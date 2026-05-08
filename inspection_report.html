@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>现地体验报告</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F5F0;--card:#fff;--primary:#2D4A3E;--accent:#C8A96E;
+  --text:#1A1A1A;--muted:#6B6B6B;--border:#E0D8CC;--danger:#C0392B;
+  --green:#27AE60;--radius:16px;--shadow:0 4px 24px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:block;}
+
+/* ── HOME ── */
+#home{background:linear-gradient(160deg,var(--primary) 0%,#1a2e26 60%,#0d1a14 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;position:relative;overflow:hidden;min-height:100vh;}
+#home::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(200,169,110,.15) 0%,transparent 70%);}
+#home::after{content:'';position:absolute;bottom:-60px;left:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(200,169,110,.1) 0%,transparent 70%);}
+.home-logo{width:72px;height:72px;background:var(--accent);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:24px;box-shadow:0 8px 32px rgba(200,169,110,.4);}
+.home-title{font-family:'DM Serif Display',serif;font-size:32px;color:#fff;text-align:center;margin-bottom:6px;}
+.home-sub{color:rgba(255,255,255,.45);font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-align:center;margin-bottom:28px;}
+.home-btn{background:var(--accent);color:var(--primary);border:none;border-radius:50px;padding:17px 48px;font-size:16px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;box-shadow:0 8px 32px rgba(200,169,110,.4);transition:all .2s;width:100%;max-width:320px;margin-bottom:12px;}
+.home-btn:hover{transform:translateY(-2px);}
+.home-btn-outline{background:transparent;color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:13px 48px;font-size:14px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;transition:all .2s;width:100%;max-width:320px;margin-bottom:12px;}
+.home-btn-outline:hover{background:rgba(255,255,255,.05);color:#fff;}
+.drafts-section{width:100%;max-width:320px;margin-bottom:16px;}
+.drafts-label{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.draft-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:12px;padding:11px 14px;margin-bottom:8px;transition:all .2s;}
+.draft-card:hover{background:rgba(255,255,255,.11);}
+.draft-card-body{flex:1;cursor:pointer;}
+.draft-card-name{font-size:13px;color:#fff;font-weight:600;}
+.draft-card-meta{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px;}
+.draft-card-del{background:rgba(255,255,255,.08);border:none;border-radius:50%;width:26px;height:26px;color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1;}
+.draft-card-del:hover{background:rgba(192,57,43,.5);color:#fff;}
+
+/* ── FORM ── */
+#form-screen{background:var(--bg);padding-bottom:130px;}
+.form-header{background:var(--primary);padding:52px 20px 22px;position:relative;}
+.back-btn{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:36px;height:36px;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.form-header h2{font-family:'DM Serif Display',serif;color:#fff;font-size:21px;margin-bottom:3px;}
+.form-header p{color:rgba(255,255,255,.45);font-size:12px;}
+.autosave-bar{display:flex;align-items:center;gap:8px;margin-top:10px;padding:7px 12px;background:rgba(200,169,110,.13);border-radius:8px;}
+.autosave-bar span{font-size:11px;color:rgba(255,255,255,.5);flex:1;}
+.autosave-bar strong{color:var(--accent);font-size:11px;}
+.form-body{padding:20px 16px;max-width:600px;margin:0 auto;}
+
+/* Cards & labels */
+.scard{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.slabel{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.13em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.frow.s1{grid-template-columns:1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:12px;color:var(--muted);font-weight:500;}
+.field select,.field input[type=date],.field input[type=text]{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-size:14px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
+.field select:focus,.field input:focus{border-color:var(--primary);}
+
+/* Property grid */
+.prop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.pchip{padding:9px 4px;border-radius:9px;border:2px solid var(--border);background:transparent;font-family:'Noto Sans SC',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .16s;text-align:center;}
+.pchip.on{border-color:var(--primary);background:var(--primary);color:#fff;font-weight:700;}
+.pchip:hover:not(.on){border-color:var(--primary);color:var(--primary);}
+
+/* Per-property panel */
+.prop-panel{background:var(--card);border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;}
+.prop-panel-hdr{display:flex;align-items:center;padding:13px 18px;background:var(--primary);cursor:pointer;user-select:none;}
+.prop-panel-hdr .ptitle{font-size:14px;font-weight:700;color:#fff;flex:1;}
+.prop-panel-hdr .pcaret{color:rgba(255,255,255,.45);font-size:12px;transition:transform .2s;}
+.prop-panel-hdr.collapsed .pcaret{transform:rotate(-90deg);}
+.prop-panel-body{padding:18px;}
+.prop-panel-body.hidden{display:none;}
+
+/* Room tags */
+.room-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
+.room-row input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:8px 12px;font-size:13px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;transition:border-color .2s;}
+.room-row input:focus{border-color:var(--primary);}
+.room-add{background:var(--primary);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-size:13px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;min-height:4px;}
+.rtag{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;background:#E8F4F0;border-radius:20px;font-size:12px;color:var(--primary);font-weight:600;}
+.rtag-del{background:none;border:none;cursor:pointer;color:var(--primary);font-size:15px;line-height:1;padding:0;}
+
+/* Dim list */
+.dim-list{display:flex;flex-direction:column;gap:0;}
+.dim-item{padding:14px 0;border-bottom:1px solid var(--border);}
+.dim-item:last-child{border-bottom:none;padding-bottom:0;}
+.dim-head{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;margin-bottom:7px;}
+.dim-icon{font-size:14px;}
+.dim-hint{font-size:11px;color:var(--muted);margin-bottom:7px;line-height:1.5;}
+.dim-ta{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-size:13px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;transition:border-color .2s;resize:none;min-height:72px;line-height:1.65;}
+.dim-ta:focus{border-color:var(--primary);}
+.dim-ta::placeholder{color:#c0b9b0;font-size:12px;}
+
+/* Photo */
+.photo-slabel{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.13em;text-transform:uppercase;margin-top:18px;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.photo-slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+.photo-actions{display:flex;gap:8px;margin-bottom:8px;}
+.photo-drop{flex:1;border:2px dashed var(--border);border-radius:11px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
+.photo-drop:hover{border-color:var(--primary);background:#f0f5f2;}
+.photo-drop input{display:none;}
+.photo-drive-btn{flex:1;border:2px dashed #4285F4;border-radius:11px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;background:#f0f4ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.photo-drive-btn:hover{background:#dde9ff;border-color:#2563eb;}
+.photo-drive-btn .drive-icon{font-size:20px;margin-bottom:2px;}
+.photo-drive-btn .drive-label{font-size:11px;color:#2563eb;font-weight:600;}
+.photo-drive-btn input{display:none;}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;}
+.pthumb{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:var(--border);}
+.pthumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.pdel{position:absolute;top:3px;right:3px;width:20px;height:20px;background:rgba(0,0,0,.6);border:none;border-radius:50%;color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pdrive-badge{position:absolute;bottom:3px;left:3px;background:rgba(66,133,244,.85);border-radius:4px;padding:1px 4px;font-size:9px;color:#fff;font-weight:700;}
+.pthumb-uploading{opacity:.6;}
+.pthumb-uploading::after{content:'上传中…';position:absolute;inset:0;background:rgba(0,0,0,.45);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;border-radius:8px;}
+.upload-progress{margin-top:6px;height:3px;background:var(--border);border-radius:3px;overflow:hidden;display:none;}
+.upload-progress.show{display:block;}
+.upload-progress-bar{height:100%;background:#4285F4;border-radius:3px;transition:width .3s;}
+
+/* Submit bar */
+.sub-bar{position:fixed;bottom:0;left:0;right:0;padding:11px 16px;background:rgba(247,245,240,.96);backdrop-filter:blur(12px);border-top:1px solid var(--border);}
+.sub-bar-inner{display:flex;gap:10px;max-width:600px;margin:0 auto;}
+.btn-save{background:transparent;color:var(--primary);border:2px solid var(--primary);border-radius:50px;padding:12px 18px;font-size:14px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;white-space:nowrap;}
+.btn-submit{flex:1;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:12px;font-size:15px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;}
+.btn-submit:hover{background:#1a2e26;}
+
+/* Yes/No */
+.yn-row{display:flex;gap:10px;margin-bottom:13px;}
+.yn-btn{flex:1;padding:12px 6px;border-radius:11px;border:2px solid var(--border);background:transparent;font-family:'Noto Sans SC',sans-serif;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .16s;text-align:center;}
+.yn-btn.yes{border-color:var(--green);background:#E8F8EE;color:#1A7A40;}
+.yn-btn.no{border-color:var(--danger);background:#FDECEA;color:var(--danger);}
+.yn-note{display:flex;flex-direction:column;gap:6px;}
+.yn-note label{font-size:12px;color:var(--muted);}
+.yn-note textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-size:13px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;resize:none;min-height:72px;line-height:1.6;}
+.yn-note textarea:focus{border-color:var(--primary);}
+
+/* ── DASHBOARD ── */
+#dashboard{background:var(--bg);padding-bottom:40px;}
+.dash-hdr{background:var(--primary);padding:52px 20px 24px;position:relative;}
+.dash-hdr h2{font-family:'DM Serif Display',serif;color:#fff;font-size:21px;margin-bottom:3px;}
+.dash-hdr p{color:rgba(255,255,255,.45);font-size:12px;}
+.dash-tabs{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:4px;margin-top:14px;}
+.dtab{flex:1;padding:8px;border:none;background:transparent;color:rgba(255,255,255,.45);border-radius:8px;font-family:'Noto Sans SC',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
+.dtab.on{background:#fff;color:var(--primary);font-weight:700;}
+.dash-body{padding:18px 16px;max-width:600px;margin:0 auto;}
+
+.filt-row{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:3px;}
+.fchip{padding:5px 13px;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:'Noto Sans SC',sans-serif;transition:all .14s;flex-shrink:0;}
+.fchip.on{background:var(--primary);border-color:var(--primary);color:#fff;}
+
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:15px 10px;text-align:center;box-shadow:var(--shadow);}
+.stat-card .sn{font-size:26px;font-family:'DM Serif Display',serif;color:var(--primary);line-height:1;}
+.stat-card .sl{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* Record cards */
+.rec-card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);}
+.rec-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.rec-name{font-size:15px;font-weight:700;}
+.rec-meta{font-size:11px;color:var(--muted);margin-top:3px;}
+.rec-pill{background:var(--primary);color:var(--accent);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;white-space:nowrap;margin-left:10px;flex-shrink:0;}
+.preview-rows{display:flex;flex-direction:column;gap:5px;}
+.prow{display:flex;gap:7px;align-items:flex-start;}
+.plbl{font-size:11px;font-weight:600;color:var(--muted);min-width:76px;flex-shrink:0;padding-top:1px;}
+.ptxt{font-size:12px;color:var(--text);line-height:1.5;}
+.ptxt.empty{color:#ccc;font-style:italic;}
+.rec-expand{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;}
+.rec-expand.open{display:block;}
+.tog{font-size:12px;color:var(--primary);background:none;border:none;cursor:pointer;margin-top:9px;font-family:'Noto Sans SC',sans-serif;text-decoration:underline;text-underline-offset:3px;}
+
+/* Expanded prop section */
+.prop-exp-head{font-size:12px;font-weight:700;color:var(--primary);padding:6px 11px;background:#f0f5f2;border-radius:7px;margin-bottom:8px;}
+.room-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:#FDF4E3;color:#9A6E2E;margin-left:5px;}
+.dim-exp-row{display:flex;gap:8px;margin-bottom:7px;align-items:flex-start;}
+.del{font-size:11px;font-weight:600;color:var(--muted);min-width:76px;flex-shrink:0;padding-top:1px;}
+.det{font-size:12px;color:var(--text);line-height:1.5;}
+.det.empty{color:#ccc;font-style:italic;}
+.photo-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px;}
+.photo-gal img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;cursor:pointer;}
+
+/* Stats — room breakdown */
+.prop-stat-card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);}
+.prop-stat-title{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:10px;}
+.room-stat-item{margin-bottom:12px;}
+.room-stat-hdr{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.room-stat-num{font-size:12px;font-weight:700;background:#E8F4F0;color:var(--primary);padding:3px 10px;border-radius:20px;}
+.room-stat-body{font-size:12px;color:var(--text);line-height:1.6;background:var(--bg);border-radius:8px;padding:10px 12px;}
+.room-stat-dim{margin-bottom:5px;}
+.room-stat-dim:last-child{margin-bottom:0;}
+.room-stat-dim-lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:2px;}
+.room-stat-dim-txt{font-size:12px;color:var(--text);line-height:1.5;}
+.bar-row{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.bar-lbl{font-size:12px;color:var(--muted);min-width:54px;}
+.bar-track{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;}
+.bar-val{font-size:11px;color:var(--muted);min-width:20px;text-align:right;}
+
+.empty-s{text-align:center;padding:50px 24px;color:var(--muted);}
+.empty-s .ei{font-size:44px;margin-bottom:14px;}
+.empty-s h3{font-size:15px;font-weight:700;margin-bottom:7px;color:var(--text);}
+.empty-s p{font-size:13px;line-height:1.6;}
+
+/* Overlay */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.show{opacity:1;pointer-events:all;}
+.ov-card{background:#fff;border-radius:22px;padding:36px 26px;text-align:center;max-width:290px;margin:0 20px;transform:scale(.8);transition:transform .3s;}
+.overlay.show .ov-card{transform:scale(1);}
+.ov-icon{font-size:52px;margin-bottom:14px;}
+.ov-card h3{font-size:19px;font-weight:700;margin-bottom:7px;color:var(--primary);}
+.ov-card p{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6;}
+.ov-close{background:var(--primary);color:#fff;border:none;border-radius:50px;padding:11px 30px;font-size:14px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:none;align-items:center;justify-content:center;}
+.lightbox.show{display:flex;}
+.lightbox img{max-width:90%;max-height:90vh;object-fit:contain;border-radius:8px;}
+.lb-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:38px;height:38px;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* AI extraction styles */
+.ai-btn{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#2D4A3E,#1a2e26);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;margin-bottom:14px;box-shadow:0 3px 14px rgba(45,74,62,.3);transition:all .2s;}
+.ai-btn:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(45,74,62,.4);}
+.ai-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.ai-btn .ai-icon{font-size:16px;}
+.ai-result-card{border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden;}
+.ai-result-prop-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--primary);}
+.ai-result-prop-name{font-size:14px;font-weight:700;color:#fff;}
+.ai-result-prop-meta{font-size:11px;color:rgba(255,255,255,.45);}
+.ai-result-body{background:var(--card);padding:14px 16px;}
+.ai-room-block{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.ai-room-block:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ai-room-label{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#E8F4F0;border-radius:20px;font-size:12px;font-weight:700;color:var(--primary);margin-bottom:10px;}
+.ai-issue-list{display:flex;flex-direction:column;gap:7px;}
+.ai-issue-item{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:var(--bg);}
+.ai-issue-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.ai-issue-content{flex:1;}
+.ai-issue-dim{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:2px;letter-spacing:.04em;}
+.ai-issue-text{font-size:12px;color:var(--text);line-height:1.55;}
+.ai-no-issue{font-size:12px;color:#27AE60;padding:6px 0;}
+.ai-ok-item{display:flex;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;background:#f0faf4;font-size:12px;color:#27AE60;}
+.ai-loading{display:flex;align-items:center;gap:8px;padding:16px;font-size:13px;color:var(--muted);}
+.ai-spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ai-error{font-size:12px;color:var(--danger);padding:10px;background:#fdecea;border-radius:8px;margin-bottom:12px;}
+.raw-toggle{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Noto Sans SC',sans-serif;text-decoration:underline;text-underline-offset:2px;margin-top:10px;display:block;}
+
+/* Export bar */
+.export-bar{margin-top:12px;}
+.export-btn{background:rgba(200,169,110,.18);color:var(--accent);border:1px solid rgba(200,169,110,.35);border-radius:50px;padding:8px 18px;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;transition:all .2s;}
+.export-btn:hover{background:rgba(200,169,110,.28);}
+
+/* ── PRINT STYLES ── */
+@media print{
+  body{background:#fff!important;font-family:'Noto Sans SC',sans-serif;}
+  .screen{display:none!important;}
+  #print-area{display:block!important;}
+  .print-header{text-align:center;padding:20px 0 12px;border-bottom:2px solid #2D4A3E;margin-bottom:20px;}
+  .print-header h1{font-size:22px;color:#2D4A3E;margin-bottom:4px;}
+  .print-header p{font-size:12px;color:#888;}
+  .print-completion{margin-bottom:20px;border:1px solid #ddd;border-radius:8px;overflow:hidden;}
+  .print-completion-head{background:#2D4A3E;color:#fff;padding:10px 14px;font-size:13px;font-weight:700;}
+  .print-member-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+  .print-member-cell{padding:8px 10px;border-right:1px solid #eee;border-bottom:1px solid #eee;font-size:12px;}
+  .print-member-cell.done{color:#1A7A40;}
+  .print-member-cell.miss{color:#bbb;}
+  .print-rec{margin-bottom:16px;border:1px solid #ddd;border-radius:8px;overflow:hidden;page-break-inside:avoid;}
+  .print-rec-head{background:#2D4A3E;color:#fff;padding:10px 14px;}
+  .print-rec-name{font-size:14px;font-weight:700;}
+  .print-rec-meta{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
+  .print-prop-section{padding:10px 14px;border-bottom:1px solid #eee;}
+  .print-prop-section:last-child{border-bottom:none;}
+  .print-prop-name{font-size:12px;font-weight:700;color:#2D4A3E;margin-bottom:7px;padding:4px 8px;background:#f0f5f2;border-radius:4px;display:inline-block;}
+  .print-dim-row{display:flex;gap:8px;margin-bottom:5px;font-size:12px;}
+  .print-dim-lbl{font-weight:700;color:#666;min-width:80px;flex-shrink:0;}
+  .print-dim-val{color:#1A1A1A;line-height:1.5;flex:1;}
+  .print-dim-val.empty{color:#ccc;}
+  .print-improved{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:4px;}
+  .print-improved.yes{background:#E8F8EE;color:#1A7A40;}
+  .print-improved.no{background:#FDECEA;color:#C0392B;}
+  .print-note{font-size:12px;color:#C0392B;border-top:1px solid #eee;padding-top:6px;margin-top:6px;}
+  .print-week-title{font-size:16px;font-weight:700;color:#2D4A3E;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #C8A96E;}
+  @page{margin:15mm 12mm;size:A4;}
+}
+
+/* Completion summary card */
+.completion-card{background:var(--card);border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;}
+.completion-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--primary);cursor:pointer;user-select:none;}
+.completion-hdr-title{font-size:13px;font-weight:700;color:#fff;}
+.completion-hdr-sub{font-size:11px;color:rgba(255,255,255,.45);}
+.completion-hdr .cc{color:rgba(255,255,255,.4);font-size:12px;transition:transform .2s;}
+.completion-hdr.collapsed .cc{transform:rotate(-90deg);}
+.completion-body{padding:14px 16px;}
+.completion-body.hidden{display:none;}
+.week-completion-row{margin-bottom:14px;}
+.week-completion-row:last-child{margin-bottom:0;}
+.week-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.member-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
+.member-check{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:9px;font-size:13px;font-weight:600;}
+.member-check.done{background:#E8F8EE;color:#1A7A40;}
+.member-check.miss{background:#F9F0F0;color:#999;}
+.member-check .ck-icon{font-size:15px;flex-shrink:0;}
+.member-check .ck-name{flex:1;font-size:12px;}
+.member-check .ck-props{font-size:10px;font-weight:400;color:#999;margin-top:1px;}
+.member-check.done .ck-props{color:#5aab7a;}
+.week-progress{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.week-prog-bar{flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden;}
+.week-prog-fill{height:100%;background:var(--green);border-radius:3px;transition:width .6s ease;}
+.week-prog-txt{font-size:11px;color:var(--muted);white-space:nowrap;}
+
+/* ── ADMIN ── */
+.admin-entry{position:absolute;bottom:20px;right:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50px;padding:7px 14px;font-size:11px;color:rgba(255,255,255,.3);cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .2s;}
+.admin-entry:hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);}
+.admin-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(200,169,110,.2);border:1px solid rgba(200,169,110,.3);border-radius:50px;padding:4px 12px;font-size:11px;color:var(--accent);margin-top:10px;}
+
+#admin-panel{background:var(--bg);padding-bottom:40px;}
+.admin-hdr{background:linear-gradient(135deg,#1a2e26,#0d1a14);padding:52px 20px 24px;position:relative;}
+.admin-hdr h2{font-family:'DM Serif Display',serif;color:#fff;font-size:22px;margin-bottom:4px;}
+.admin-hdr p{color:rgba(255,255,255,.4);font-size:12px;}
+.admin-hdr .back-btn{top:16px;left:16px;}
+.admin-badge-hdr{display:inline-flex;align-items:center;gap:5px;background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.25);border-radius:50px;padding:4px 12px;font-size:11px;color:var(--accent);margin-top:10px;}
+.admin-body{padding:20px 16px;max-width:600px;margin:0 auto;}
+.admin-section{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.admin-section-title{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+.admin-tag-list{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;}
+.admin-tag{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;}
+.admin-tag.member-tag{background:#E8F4F0;color:var(--primary);}
+.admin-tag.prop-tag{background:#FDF4E3;color:#9A6E2E;}
+.admin-tag .del-tag{background:none;border:none;cursor:pointer;font-size:14px;line-height:1;padding:0;opacity:.5;}
+.admin-tag .del-tag:hover{opacity:1;}
+.admin-add-row{display:flex;gap:8px;margin-top:8px;}
+.admin-add-row input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:8px 12px;font-size:13px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;transition:border-color .2s;}
+.admin-add-row input:focus{border-color:var(--primary);}
+.admin-add-btn{background:var(--primary);color:#fff;border:none;border-radius:9px;padding:8px 16px;font-size:13px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;white-space:nowrap;}
+.admin-rec-list{display:flex;flex-direction:column;gap:8px;}
+.admin-rec-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:9px;}
+.admin-rec-info{flex:1;font-size:12px;color:var(--text);}
+.admin-rec-info .ari-name{font-weight:700;margin-bottom:2px;}
+.admin-rec-info .ari-meta{color:var(--muted);font-size:11px;}
+.admin-del-btn{background:none;border:1.5px solid #e0a0a0;border-radius:7px;color:var(--danger);padding:5px 10px;font-size:11px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;white-space:nowrap;}
+.admin-del-btn:hover{background:#FDECEA;}
+.admin-danger-btn{width:100%;padding:12px;background:transparent;border:2px solid var(--danger);color:var(--danger);border-radius:10px;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;transition:all .2s;margin-top:6px;}
+.admin-danger-btn:hover{background:#FDECEA;}
+.pw-input-row{display:flex;flex-direction:column;gap:8px;}
+.pw-input-row input{background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;transition:border-color .2s;}
+.pw-input-row input:focus{border-color:var(--primary);}
+.pw-save-btn{background:var(--primary);color:#fff;border:none;border-radius:9px;padding:11px;font-size:14px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;}
+.logout-btn{width:100%;padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);border-radius:10px;font-size:13px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;margin-top:8px;}
+.logout-btn:hover{border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.8);}
+.admin-rec-filter{display:flex;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:3px;}
+
+.admin-save-bar{display:none;position:sticky;bottom:0;background:var(--primary);padding:12px 16px;border-radius:12px;margin-top:12px;align-items:center;gap:10px;}
+.admin-save-bar.visible{display:flex;}
+.admin-save-bar span{font-size:12px;color:rgba(255,255,255,.75);flex:1;}
+.admin-save-confirm{background:var(--accent);color:var(--primary);border:none;border-radius:50px;padding:9px 18px;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;white-space:nowrap;}
+.admin-save-discard{background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:8px 14px;font-size:12px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;white-space:nowrap;}
+.inline-confirm{display:none;align-items:center;gap:8px;padding:8px 10px;background:#FDECEA;border-radius:8px;margin-top:6px;}
+.inline-confirm.show{display:flex;}
+.inline-confirm span{font-size:12px;color:var(--danger);flex:1;}
+.ic-yes{background:var(--danger);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;}
+.ic-no{background:transparent;border:1px solid #ccc;border-radius:6px;padding:5px 10px;font-size:12px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;color:var(--muted);}
+.admin-tag.pending-del{opacity:.4;text-decoration:line-through;}
+
+/* Cloud sync */
+.sync-bar{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:50px;font-size:11px;font-weight:600;margin-top:10px;width:fit-content;}
+.sync-bar.ok{background:rgba(39,174,96,.15);color:#27AE60;border:1px solid rgba(39,174,96,.25);}
+.sync-bar.off{background:rgba(255,255,255,.07);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.1);}
+.sync-bar.loading{background:rgba(200,169,110,.12);color:var(--accent);border:1px solid rgba(200,169,110,.2);}
+.sync-bar.err{background:rgba(192,57,43,.12);color:#e05a47;border:1px solid rgba(192,57,43,.2);}
+.sync-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.sync-dot.ok{background:#27AE60;}
+.sync-dot.off{background:rgba(255,255,255,.25);}
+.sync-dot.loading{background:var(--accent);animation:pulse .8s ease-in-out infinite;}
+.sync-dot.err{background:#e05a47;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.cloud-banner{background:linear-gradient(135deg,#1a3a52,#0d2035);border-radius:12px;padding:16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px;}
+.cloud-banner-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.cloud-banner-body{}
+.cloud-banner-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.cloud-banner-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;}
+.cloud-config-fields{display:flex;flex-direction:column;gap:8px;}
+.cloud-config-fields input{background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;transition:border-color .2s;}
+.cloud-config-fields input:focus{border-color:var(--primary);}
+.cloud-status-line{font-size:12px;margin-top:6px;padding:7px 10px;border-radius:7px;display:none;}
+.cloud-status-line.show{display:block;}
+.cloud-status-line.ok{background:#E8F8EE;color:#1A7A40;}
+.cloud-status-line.err{background:#FDECEA;color:var(--danger);}
+.cloud-test-btn{background:var(--primary);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;margin-top:4px;}
+.cloud-save-btn{background:var(--accent);color:var(--primary);border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;margin-top:4px;}
+.cloud-btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.cloud-sync-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);border-radius:50px;padding:7px 16px;font-size:12px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;transition:all .2s;}
+.cloud-sync-btn:hover{background:rgba(255,255,255,.12);color:#fff;}
+
+@media(max-width:380px){
+  .prop-grid{grid-template-columns:repeat(2,1fr);}
+  .frow{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:repeat(3,1fr);}
+  .member-checks{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HOME ══ -->
+<div id="home" class="screen active">
+  <div class="home-logo">🏠</div>
+  <h1 class="home-title">现地体验报告</h1>
+  <p class="home-sub">On-site Experience · Weekly Report</p>
+  <div class="drafts-section" id="home-drafts" style="display:none">
+    <div class="drafts-label">📝 未完成草稿</div>
+    <div id="draft-list"></div>
+  </div>
+  <button class="home-btn" onclick="newDraft()">＋ 新建体验记录</button>
+  <button class="home-btn-outline" onclick="goTo('dashboard');renderDash()">📊 查看历史记录</button>
+  <div id="sync-status-bar" class="sync-bar off"><span class="sync-dot off" id="sync-dot"></span><span id="sync-label">本地模式（未连接云端）</span></div>
+  <div id="admin-status-badge" style="display:none" class="admin-badge">🔑 管理员模式已开启</div>
+  <button class="admin-entry" onclick="openAdminLogin()">⚙️ 管理员</button>
+</div>
+
+<!-- ══ ADMIN LOGIN MODAL ══ -->
+<div class="overlay" id="admin-login-modal">
+  <div class="ov-card" style="max-width:320px;width:90%;">
+    <div style="font-size:28px;margin-bottom:10px;">🔑</div>
+    <h3 style="margin-bottom:6px;">管理员登录</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">请输入管理员密码</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <input type="password" id="admin-pw-input" placeholder="输入密码" style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:15px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;text-align:center;letter-spacing:.2em;"
+        onkeydown="if(event.key==='Enter')doAdminLogin()">
+      <div id="admin-pw-error" style="display:none;font-size:12px;color:var(--danger);text-align:center;">密码错误，请重试</div>
+      <button onclick="doAdminLogin()" style="background:var(--primary);color:#fff;border:none;border-radius:50px;padding:13px;font-size:14px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;">登录</button>
+      <button onclick="closeAdminLogin()" style="background:transparent;color:var(--muted);border:none;font-size:13px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;padding:4px;">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN PANEL ══ -->
+<div id="admin-panel" class="screen">
+  <div class="admin-hdr">
+    <button class="back-btn" onclick="goTo('home')">←</button>
+    <h2>管理员设置</h2>
+    <p>系统配置与数据管理</p>
+    <div class="admin-badge-hdr">🔑 管理员模式</div>
+    <button class="logout-btn" onclick="adminLogout()">退出管理员</button>
+  </div>
+  <div class="admin-body">
+
+    <!-- ☁️ 云端同步状态 -->
+    <div class="admin-section">
+      <div class="admin-section-title">☁️ 云端同步</div>
+      <div class="cloud-banner">
+        <div class="cloud-banner-icon">☁️</div>
+        <div class="cloud-banner-body">
+          <div class="cloud-banner-title">Google Sheets 云端同步已启用</div>
+          <div class="cloud-banner-desc">所有成员的提交记录自动同步到 Google 表格，任何人打开链接都能看到所有人的数据。</div>
+        </div>
+      </div>
+      <div id="cloud-status-msg" class="cloud-status-line show ok">✅ 云端同步已启用</div>
+    </div>
+
+    <!-- 成员管理 -->
+    <div class="admin-section">
+      <div class="admin-section-title">👥 成员名单管理</div>
+      <div class="admin-tag-list" id="admin-member-list"></div>
+      <div class="admin-add-row">
+        <input type="text" id="admin-member-input" placeholder="新成员名字" maxlength="20"
+          onkeydown="if(event.key==='Enter')adminAddMember()">
+        <button class="admin-add-btn" onclick="adminAddMember()">＋ 添加</button>
+      </div>
+      <div class="admin-save-bar" id="member-save-bar">
+        <span>⚠️ 有未保存的修改</span>
+        <button class="admin-save-discard" onclick="adminDiscardMembers()">撤销</button>
+        <button class="admin-save-confirm" onclick="adminSaveMembers()">保存修改</button>
+      </div>
+    </div>
+
+    <!-- 物业管理 -->
+    <div class="admin-section">
+      <div class="admin-section-title">🏠 物业列表管理</div>
+      <div class="admin-tag-list" id="admin-prop-list"></div>
+      <div class="admin-add-row">
+        <input type="text" id="admin-prop-input" placeholder="新物业名称" maxlength="20"
+          onkeydown="if(event.key==='Enter')adminAddProp()">
+        <button class="admin-add-btn" onclick="adminAddProp()">＋ 添加</button>
+      </div>
+      <div class="admin-save-bar" id="prop-save-bar">
+        <span>⚠️ 有未保存的修改</span>
+        <button class="admin-save-discard" onclick="adminDiscardProps()">撤销</button>
+        <button class="admin-save-confirm" onclick="adminSaveProps()">保存修改</button>
+      </div>
+    </div>
+
+    <!-- 历史记录管理 -->
+    <div class="admin-section">
+      <div class="admin-section-title">📋 历史记录管理</div>
+      <div class="admin-rec-filter" id="admin-rec-filter"></div>
+      <div class="admin-rec-list" id="admin-rec-list"></div>
+      <div class="inline-confirm" id="rec-confirm">
+        <span id="rec-confirm-msg">确定要删除这条记录吗？</span>
+        <button class="ic-no" onclick="hideRecConfirm()">取消</button>
+        <button class="ic-yes" onclick="doDelRecord()">确认删除</button>
+      </div>
+    </div>
+
+    <!-- 草稿管理 -->
+    <div class="admin-section">
+      <div class="admin-section-title">📝 草稿管理</div>
+      <div id="admin-draft-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+      <div class="inline-confirm" id="draft-confirm">
+        <span>确定要清除所有草稿吗？</span>
+        <button class="ic-no" onclick="hideDraftConfirm()">取消</button>
+        <button class="ic-yes" onclick="doAdminClearDrafts()">确认清除</button>
+      </div>
+      <button class="admin-danger-btn" onclick="showDraftConfirm()">🗑️ 清除所有草稿</button>
+    </div>
+
+    <!-- 密码修改 -->
+    <div class="admin-section">
+      <div class="admin-section-title">🔐 修改管理员密码</div>
+      <div class="pw-input-row">
+        <input type="password" id="pw-old" placeholder="当前密码">
+        <input type="password" id="pw-new" placeholder="新密码">
+        <input type="password" id="pw-confirm" placeholder="确认新密码">
+        <div id="pw-msg" style="font-size:12px;text-align:center;display:none;"></div>
+        <button class="pw-save-btn" onclick="adminChangePw()">保存新密码</button>
+      </div>
+    </div>
+
+    <!-- 危险操作 -->
+    <div class="admin-section">
+      <div class="admin-section-title" style="color:var(--danger);">⚠️ 危险操作</div>
+      <div class="inline-confirm" id="allrec-confirm">
+        <span>所有记录将被永久删除，无法恢复！</span>
+        <button class="ic-no" onclick="hideAllRecConfirm()">取消</button>
+        <button class="ic-yes" onclick="doAdminClearAllRecords()">确认清空</button>
+      </div>
+      <button class="admin-danger-btn" onclick="showAllRecConfirm()">🗑️ 清空所有历史记录</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FORM ══ -->
+<div id="form-screen" class="screen">
+  <div class="form-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h2>现地体验表</h2>
+    <p>以入住客人视角如实记录</p>
+    <div class="autosave-bar">
+      <span>草稿自动保存中</span>
+      <strong id="save-time">—</strong>
+    </div>
+  </div>
+
+  <div class="form-body">
+    <!-- 基础信息 -->
+    <div class="scard">
+      <div class="slabel">基础信息</div>
+      <div class="frow">
+        <div class="field">
+          <label>体验人</label>
+          <select id="f-member">
+            <option value="">选择成员</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>体验日期</label>
+          <input type="date" id="f-date">
+        </div>
+      </div>
+      <div class="frow s1">
+        <div class="field">
+          <label>周次</label>
+          <select id="f-week"><option value="">选择周次</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 物业选择 -->
+    <div class="scard">
+      <div class="slabel">体验物业（可多选）</div>
+      <div class="prop-grid" id="prop-grid"></div>
+    </div>
+
+    <!-- 物业面板 -->
+    <div id="panels"></div>
+
+    <!-- 与上次对比 -->
+    <div class="scard">
+      <div class="slabel">与上次相比</div>
+      <p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:13px;">较上次体验感受如何，是否有改进？</p>
+      <div class="yn-row">
+        <button class="yn-btn" id="yn-yes" onclick="setYN('yes')">✅ 有改进</button>
+        <button class="yn-btn" id="yn-no"  onclick="setYN('no')">❌ 没有改进</button>
+      </div>
+      <div id="yn-detail" style="display:none" class="yn-note">
+        <label>请说明具体未改进或仍存在的问题</label>
+        <textarea id="f-note" placeholder="请描述哪些问题上次提出后仍未改善..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-bar">
+    <div class="sub-bar-inner">
+      <button class="btn-save" onclick="saveDraft(true)">💾 保存草稿</button>
+      <button class="btn-submit" onclick="submitForm()">✓ 正式提交</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard" class="screen">
+  <div class="dash-hdr">
+    <button class="back-btn" onclick="goTo('home');renderHome()">←</button>
+    <h2>体验记录总览</h2>
+    <p>工作留痕 · 问题追踪</p>
+    <div class="dash-tabs">
+      <button class="dtab on" id="dt-rec" onclick="switchTab('rec')">记录列表</button>
+      <button class="dtab"    id="dt-room" onclick="switchTab('room')">房间问题</button>
+      <button class="dtab"    id="dt-stat" onclick="switchTab('stat')">统计概览</button>
+    </div>
+    <div class="export-bar" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <button class="export-btn" onclick="openExportModal()">🖨️ 打印 / 导出</button>
+      <button class="cloud-sync-btn" id="dash-sync-btn" onclick="syncFromCloud()" style="display:none">🔄 同步云端数据</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div id="view-rec">
+      <div class="filt-row" id="week-filters"></div>
+      <div id="rec-list"></div>
+    </div>
+    <div id="view-room" style="display:none">
+      <div class="filt-row" id="room-prop-filters"></div>
+      <div id="room-list"></div>
+    </div>
+    <div id="view-stat" style="display:none">
+      <div class="stats-row" id="stat-top"></div>
+      <div id="stat-detail"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EXPORT MODAL ══ -->
+<div class="overlay" id="export-modal">
+  <div class="ov-card" style="max-width:340px;width:90%;">
+    <div style="font-size:28px;margin-bottom:10px;">📊</div>
+    <h3 style="margin-bottom:6px;">生成体验周报</h3>
+    <p style="margin-bottom:18px;font-size:13px;color:var(--muted);">AI 将自动整理汇总所有成员的体验数据，生成可打印的正式报告</p>
+    <div style="text-align:left;margin-bottom:18px;">
+      <label style="font-size:12px;color:var(--muted);font-weight:500;display:block;margin-bottom:6px;">选择周次</label>
+      <select id="export-week-sel" style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-size:14px;font-family:'Noto Sans SC',sans-serif;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;"></select>
+    </div>
+    <div id="export-action-btns" style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="doAIExport()" style="background:var(--primary);color:#fff;border:none;border-radius:50px;padding:14px;font-size:14px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;">✨ AI 生成整理报告</button>
+      <button onclick="closeExportModal()" style="background:transparent;color:var(--muted);border:none;font-size:13px;font-family:'Noto Sans SC',sans-serif;cursor:pointer;padding:4px;">取消</button>
+    </div>
+    <div id="export-ai-status" style="display:none;flex-direction:column;align-items:center;gap:10px;padding:8px 0;">
+      <div style="width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;"></div>
+      <div style="font-size:13px;color:var(--muted);text-align:center;">AI 正在整理汇总数据<br><span style="font-size:11px;">通常需要 10-20 秒</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lb" onclick="closeLb()">
+  <button class="lb-close">×</button>
+  <img id="lb-img" src="" alt="">
+</div>
+<div class="overlay" id="overlay">
+  <div class="ov-card">
+    <div class="ov-icon">✅</div>
+    <h3>提交成功！</h3>
+    <p id="ov-msg"></p>
+    <button class="ov-close" onclick="closeOverlay()">好的</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════
+//  CONFIG
+// ════════════════════════════════
+let PROPS=['天下','天下3','岸里','花园1','花园2','难波1','难波2','难波3','难波4A','难波4B','黑门1','黑门2','黑门3','黑门4','道2','通2','今里','新大阪'];
+const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+const WEEKS=['第一周','第二周','第三周','第四周'];
+const DIMS=[
+  {k:'env',     ic:'🌿',lb:'整体环境观感',   ph:'描述整体氛围、装修风格、入住第一印象...'},
+  {k:'checkin', ic:'🔑',lb:'入住便利度',     ph:'取钥匙/密码锁流程是否顺畅，指引是否清晰...'},
+  {k:'clean',   ic:'🧹',lb:'房间干净程度',   ph:'地面、床铺、桌面、厨房、卫生间等清洁情况（复数房间需标明房间号）...'},
+  {k:'amenity', ic:'🧴',lb:'日用品备置',     ph:'洗漱用品、卫生纸、垃圾袋、厨房用品等是否齐全（复数房间需标明房间号）...'},
+  {k:'smell',   ic:'🌸',lb:'气味 / 空气质量',ph:'有无异味、霉味、香烟味（复数房间需标明房间号）...'},
+  {k:'facility',ic:'🛋️',lb:'设施完好度',     ph:'家具、电器、卫浴设备是否正常运作（复数房间需标明房间号）...'},
+  {k:'wifi',    ic:'📶',lb:'WiFi 网络',      ph:'网络速度、稳定性（复数房间需标明房间号）...'},
+  {k:'other',   ic:'💬',lb:'其他建议',        ph:'任何其他值得记录的体验或改进建议（复数房间需标明房间号）...'},
+];
+const LS_REC='iv5_records', LS_DR='iv5_drafts';
+
+// ════════════════════════════════
+//  STATE
+// ════════════════════════════════
+let records=[], drafts={}, curDraftId=null;
+let selProps=new Set(), propRooms={}, propPhotos={}, ynVal=null, autoTimer=null;
+let dashTab='rec', recFilter='all', roomPropFilter='all';
+
+try{records=JSON.parse(localStorage.getItem(LS_REC)||'[]');}catch(e){records=[];}
+try{drafts=JSON.parse(localStorage.getItem(LS_DR)||'{}');}catch(e){drafts={};}
+
+// ════════════════════════════════
+//  INIT
+// ════════════════════════════════
+function init(){
+  loadDynConfig();
+  loadCloudConfig();
+  // Sync globals
+  MEMBERS_LIST.length=0; MEMBERS_DYN.forEach(m=>MEMBERS_LIST.push(m));
+  PROPS.length=0; PROPS_DYN.forEach(p=>PROPS.push(p));
+
+  const ws=document.getElementById('f-week');
+  MONTHS.forEach(m=>WEEKS.forEach(w=>{const o=document.createElement('option');o.value=m+w;o.textContent=m+' '+w;ws.appendChild(o);}));
+  const now=new Date();
+  document.getElementById('f-date').value=now.toISOString().slice(0,10);
+  document.getElementById('f-week').value=MONTHS[now.getMonth()]+WEEKS[Math.min(Math.floor((now.getDate()-1)/7),3)];
+
+  // Build member select from dynamic list
+  const sel=document.getElementById('f-member');
+  sel.innerHTML='<option value="">选择成员</option>';
+  MEMBERS_DYN.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
+
+  // Build prop grid from dynamic list
+  const grid=document.getElementById('prop-grid');
+  PROPS_DYN.forEach(p=>{
+    const b=document.createElement('button');b.type='button';b.className='pchip';b.textContent=p;b.id='pc-'+sid(p);
+    b.onclick=()=>{selProps.has(p)?(selProps.delete(p),b.classList.remove('on'),removePanel(p)):(selProps.add(p),b.classList.add('on'),addPanel(p));sched();};
+    grid.appendChild(b);
+  });
+
+  renderHome();
+
+  // Auto-sync from cloud on startup so everyone sees latest data
+  if(cloudEnabled){
+    updateSyncUI('loading');
+    cloudPullRecords().then(cloudRecs=>{
+      const localPhotos={};
+      records.forEach(r=>{if(r.propPhotos&&Object.keys(r.propPhotos).length)localPhotos[r.id]=r.propPhotos;});
+      records=cloudRecs.map(r=>({...r,propPhotos:localPhotos[r.id]||{}}));
+      try{localStorage.setItem(LS_REC,JSON.stringify(records));}catch(e){}
+      updateSyncUI('ok','云端已连接 · '+records.length+'条记录');
+    }).catch(()=>updateSyncUI('err','云端连接失败，显示本地数据'));
+  }
+}
+
+// ════════════════════════════════
+//  HOME
+// ════════════════════════════════
+function renderHome(){
+  const ids=Object.keys(drafts);
+  const sec=document.getElementById('home-drafts'),list=document.getElementById('draft-list');
+  list.innerHTML='';
+  if(!ids.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  ids.sort((a,b)=>(drafts[b]._at||'').localeCompare(drafts[a]._at||'')).forEach(id=>{
+    const d=drafts[id];
+    const el=document.createElement('div');el.className='draft-card';
+    const props=(d.properties||[]).join('、')||'未选物业';
+    const rooms=Object.values(d.propRooms||{}).flat();
+    const roomStr=rooms.length?'  🚪'+rooms.join('、'):'';
+    el.innerHTML=`<div class="draft-card-body" onclick="openDraft('${id}')">
+      <div class="draft-card-name">${d.member||'未署名'} · ${d.week||'未选周次'}</div>
+      <div class="draft-card-meta">${props}${roomStr}${d._at?' · '+fmtT(d._at):''}</div>
+    </div><button class="draft-card-del" onclick="event.stopPropagation();delDraft('${id}')">×</button>`;
+    list.appendChild(el);
+  });
+}
+
+function fmtT(iso){try{const d=new Date(iso);return`${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;}catch(e){return'';}}
+function pad(n){return String(n).padStart(2,'0');}
+
+// ════════════════════════════════
+//  NAV
+// ════════════════════════════════
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goBack(){saveDraft(false);goTo('home');renderHome();}
+
+function newDraft(){
+  curDraftId='d-'+Date.now();
+  resetUI();
+  const now=new Date();
+  document.getElementById('f-date').value=now.toISOString().slice(0,10);
+  document.getElementById('f-week').value=MONTHS[now.getMonth()]+WEEKS[Math.min(Math.floor((now.getDate()-1)/7),3)];
+  goTo('form-screen');
+}
+
+function openDraft(id){curDraftId=id;resetUI();restoreDraft(drafts[id]);goTo('form-screen');}
+function delDraft(id){if(!confirm('确定删除这份草稿？'))return;delete drafts[id];saveDrafts();renderHome();}
+
+// ════════════════════════════════
+//  PANELS
+// ════════════════════════════════
+function sid(s){return s.replace(/[^a-zA-Z0-9]/g,'_');}
+function ppid(p){return 'pp-'+sid(p);}
+
+function addPanel(p){
+  if(document.getElementById(ppid(p)))return;
+  if(!propRooms[p])propRooms[p]=[];
+  if(!propPhotos[p])propPhotos[p]=[];
+
+  const card=document.createElement('div');card.className='prop-panel';card.id=ppid(p);
+
+  // Header
+  const hdr=document.createElement('div');hdr.className='prop-panel-hdr';
+  hdr.innerHTML=`<span class="ptitle">🏠 ${p} · 体验记录</span><span class="pcaret">▼</span>`;
+  hdr.onclick=()=>togglePanel(p);
+
+  // Body
+  const body=document.createElement('div');body.className='prop-panel-body';body.id=ppid(p)+'-b';
+
+  // Room input
+  body.innerHTML=`
+    <div style="margin-bottom:4px">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px;">🚪 体验房间号 <span style="font-weight:400;color:#bbb;font-size:11px;">（可多选，随时追加）</span></div>
+      <div class="room-row">
+        <input type="text" id="${ppid(p)}-ri" placeholder="输入房间号，如 301" maxlength="10"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();addRoom('${p}');}">
+        <button class="room-add" onclick="addRoom('${p}')">✓ 确认</button>
+      </div>
+      <div class="tags-wrap" id="${ppid(p)}-tags"></div>
+    </div>
+  `;
+
+  // Dim list
+  const dl=document.createElement('div');dl.className='dim-list';
+  // 房源整体感受标题
+  const overallLabel=document.createElement('div');
+  overallLabel.style='font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:2px;';
+  overallLabel.innerHTML='🏠 房源整体感受';
+  dl.appendChild(overallLabel);
+  DIMS.forEach((d,i)=>{
+    // 分割线：前2项（整体）与后面（房间维度）之间
+    if(i===2){
+      const divider=document.createElement('div');
+      divider.style='margin:6px 0 2px;padding:8px 0 4px;border-top:2px dashed var(--border);';
+      divider.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;">🚪 各房间情况 <span style="font-weight:400;color:#bbb;font-size:10px;">（复数房间需标明房间号）</span></div>';
+      dl.appendChild(divider);
+    }
+    const item=document.createElement('div');item.className='dim-item';
+    item.innerHTML=`
+      <div class="dim-head"><span class="dim-icon">${d.ic}</span>${d.lb}</div>
+      <div class="dim-hint">${d.ph}</div>
+      <textarea class="dim-ta" id="${ppid(p)}-${d.k}" placeholder="在此填写..." oninput="sched()"></textarea>
+    `;
+    dl.appendChild(item);
+  });
+  body.appendChild(dl);
+
+  // Photos
+  const photoSec=document.createElement('div');
+  photoSec.innerHTML=`
+    <div class="photo-slabel">现场照片</div>
+    <div class="photo-actions">
+      <div class="photo-drop" onclick="document.getElementById('${ppid(p)}-fi').click()">
+        <input type="file" id="${ppid(p)}-fi" accept="image/*" multiple onchange="handlePhotos(event,'${p}')">
+        <div style="font-size:20px;margin-bottom:2px">📷</div>
+        <div style="font-size:11px;color:var(--muted)">本地照片</div>
+      </div>
+      <div class="photo-drive-btn" onclick="document.getElementById('${ppid(p)}-dfi').click()">
+        <input type="file" id="${ppid(p)}-dfi" accept="image/*" multiple onchange="handleDriveUpload(event,'${p}')">
+        <div class="drive-icon">
+          <svg width="20" height="20" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
+            <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+            <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/>
+            <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+            <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+            <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+            <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+          </svg>
+        </div>
+        <div class="drive-label">上传到 Drive</div>
+      </div>
+    </div>
+    <div class="upload-progress" id="${ppid(p)}-uprog"><div class="upload-progress-bar" id="${ppid(p)}-uprogbar" style="width:0%"></div></div>
+    <div class="photo-grid" id="${ppid(p)}-pg"></div>
+  `;
+  body.appendChild(photoSec);
+
+  card.appendChild(hdr);card.appendChild(body);
+  document.getElementById('panels').appendChild(card);
+  renderRoomTags(p);
+  // 手机端自动滚动到新展开的面板
+  setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function removePanel(p){const el=document.getElementById(ppid(p));if(el)el.remove();delete propRooms[p];delete propPhotos[p];}
+function togglePanel(p){
+  const h=document.querySelector(`#${ppid(p)} .prop-panel-hdr`);
+  const b=document.getElementById(ppid(p)+'-b');
+  const c=h.classList.toggle('collapsed');b.classList.toggle('hidden',c);
+}
+
+// ════════════════════════════════
+//  ROOMS
+// ════════════════════════════════
+function addRoom(p){
+  const inp=document.getElementById(ppid(p)+'-ri');
+  const v=inp.value.trim();if(!v)return;
+  if(!propRooms[p])propRooms[p]=[];
+  if(!propRooms[p].includes(v))propRooms[p].push(v);
+  inp.value='';
+  renderRoomTags(p);sched();
+}
+
+function removeRoom(p,r){
+  propRooms[p]=(propRooms[p]||[]).filter(x=>x!==r);
+  renderRoomTags(p);sched();
+}
+
+function renderRoomTags(p){
+  const c=document.getElementById(ppid(p)+'-tags');if(!c)return;
+  c.innerHTML=(propRooms[p]||[]).map(r=>`<span class="rtag">🚪 ${r}室<button class="rtag-del" onclick="removeRoom('${p}','${r}')">×</button></span>`).join('');
+}
+
+// ════════════════════════════════
+//  PHOTOS
+// ════════════════════════════════
+function handlePhotos(evt,p){
+  Array.from(evt.target.files).forEach(f=>{
+    const r=new FileReader();r.onload=e=>{propPhotos[p].push({type:'local',src:e.target.result});renderThumbs(p);sched();};r.readAsDataURL(f);
+  });evt.target.value='';
+}
+
+// ── Google Drive upload ──
+async function handleDriveUpload(evt,p){
+  const files=Array.from(evt.target.files);evt.target.value='';
+  if(!files.length)return;
+  const prog=document.getElementById(ppid(p)+'-uprog');
+  const bar=document.getElementById(ppid(p)+'-uprogbar');
+  if(prog){prog.classList.add('show');bar.style.width='0%';}
+  let done=0;
+  for(const f of files){
+    // placeholder thumb while uploading
+    const pid2=`${ppid(p)}-pt${Date.now()}`;
+    propPhotos[p].push({type:'uploading',id:pid2,name:f.name});
+    renderThumbs(p);
+    try{
+      const url=await uploadToDrive(f,p);
+      const idx=propPhotos[p].findIndex(x=>x.id===pid2);
+      if(idx>=0)propPhotos[p][idx]={type:'drive',src:url,name:f.name};
+    }catch(e){
+      const idx=propPhotos[p].findIndex(x=>x.id===pid2);
+      if(idx>=0)propPhotos[p].splice(idx,1);
+      toast('上传失败：'+f.name+' ⚠️');
+    }
+    done++;
+    if(bar)bar.style.width=(done/files.length*100)+'%';
+    renderThumbs(p);sched();
+  }
+  setTimeout(()=>{if(prog)prog.classList.remove('show');},800);
+}
+
+async function uploadToDrive(file,propName){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=async e=>{
+      try{
+        const base64=e.target.result.split(',')[1];
+        const payload={
+          action:'uploadPhoto',
+          fileName:file.name,
+          mimeType:file.type||'image/jpeg',
+          base64Data:base64,
+          folderName:'现地体验报告_'+propName
+        };
+        const res=await fetch(GAS_URL,{
+          method:'POST',
+          headers:{'Content-Type':'text/plain'},
+          body:JSON.stringify(payload)
+        });
+        const data=await res.json();
+        if(data.url)resolve(data.url);
+        else reject(new Error(data.error||'上传失败'));
+      }catch(err){reject(err);}
+    };
+    reader.onerror=()=>reject(new Error('文件读取失败'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderThumbs(p){
+  const c=document.getElementById(ppid(p)+'-pg');if(!c)return;c.innerHTML='';
+  (propPhotos[p]||[]).forEach((photo,i)=>{
+    const d=document.createElement('div');
+    const src=photo.type==='local'?photo.src:photo.type==='drive'?photo.src:null;
+    if(photo.type==='uploading'){
+      d.className='pthumb pthumb-uploading';
+      d.innerHTML=`<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">`;
+    }else{
+      d.className='pthumb';
+      const badge=photo.type==='drive'?'<span class="pdrive-badge">Drive</span>':'';
+      d.innerHTML=`<img src="${src}" alt="" onclick="openLb('${src}')">${badge}<button class="pdel" onclick="removePhoto('${p}',${i})">×</button>`;
+    }
+    c.appendChild(d);
+  });
+}
+function removePhoto(p,i){propPhotos[p].splice(i,1);renderThumbs(p);sched();}
+
+// ════════════════════════════════
+//  YES / NO
+// ════════════════════════════════
+function setYN(v){
+  ynVal=v;
+  document.getElementById('yn-yes').className='yn-btn'+(v==='yes'?' yes':'');
+  document.getElementById('yn-no').className='yn-btn'+(v==='no'?' no':'');
+  document.getElementById('yn-detail').style.display=v==='no'?'':'none';
+  if(v==='yes')document.getElementById('f-note').value='';
+  sched();
+}
+
+// ════════════════════════════════
+//  DRAFT AUTOSAVE
+// ════════════════════════════════
+function sched(){clearTimeout(autoTimer);autoTimer=setTimeout(()=>saveDraft(false),1400);}
+
+function collect(){
+  const pd={},pr={},pp={};
+  selProps.forEach(p=>{
+    pr[p]=[...(propRooms[p]||[])];
+    // Serialize photos: keep drive URLs, drop local base64 (too large for sheet)
+    pp[p]=(propPhotos[p]||[]).filter(x=>x.type==='drive'||x.type==='local').map(x=>x.type==='drive'?{type:'drive',src:x.src,name:x.name||''}:{type:'local',src:x.src});
+    pd[p]={};
+    DIMS.forEach(d=>{const el=document.getElementById(ppid(p)+'-'+d.k);pd[p][d.k]=el?el.value.trim():'';});
+  });
+  return{member:document.getElementById('f-member').value,week:document.getElementById('f-week').value,
+    date:document.getElementById('f-date').value,properties:[...selProps],propRooms:pr,propDims:pd,propPhotos:pp,
+    improved:ynVal,note:document.getElementById('f-note').value.trim()};
+}
+
+function saveDraft(show){
+  if(!curDraftId)return;
+  const data=collect();data._at=new Date().toISOString();data._id=curDraftId;
+  drafts[curDraftId]=data;saveDrafts();
+  const t=document.getElementById('save-time');if(t)t.textContent=fmtT(data._at)+' 已保存';
+  if(show)toast('草稿已保存 💾');
+}
+function saveDrafts(){try{localStorage.setItem(LS_DR,JSON.stringify(drafts));}catch(e){}}
+
+function restoreDraft(d){
+  if(!d)return;
+  if(d.member)document.getElementById('f-member').value=d.member;
+  if(d.week)document.getElementById('f-week').value=d.week;
+  if(d.date)document.getElementById('f-date').value=d.date;
+  if(d.improved)setYN(d.improved);
+  if(d.note)document.getElementById('f-note').value=d.note;
+  if(d._at){const t=document.getElementById('save-time');if(t)t.textContent=fmtT(d._at)+' 已保存';}
+
+  // Restore rooms first
+  if(d.propRooms)Object.entries(d.propRooms).forEach(([p,rs])=>propRooms[p]=[...rs]);
+  if(d.propPhotos)Object.entries(d.propPhotos).forEach(([p,ph])=>propPhotos[p]=ph.map(x=>typeof x==='string'?{type:'local',src:x}:x));
+
+  (d.properties||[]).forEach(p=>{
+    if(!selProps.has(p)){selProps.add(p);const b=document.getElementById('pc-'+sid(p));if(b)b.classList.add('on');}
+    if(!document.getElementById(ppid(p)))addPanel(p);
+    renderRoomTags(p);renderThumbs(p);
+  });
+
+  if(d.propDims)Object.entries(d.propDims).forEach(([p,dims])=>{
+    DIMS.forEach(d2=>{const el=document.getElementById(ppid(p)+'-'+d2.k);if(el&&dims[d2.k])el.value=dims[d2.k];});
+  });
+}
+
+// ════════════════════════════════
+//  SUBMIT
+// ════════════════════════════════
+function submitForm(){
+  const m=document.getElementById('f-member').value,w=document.getElementById('f-week').value,dt=document.getElementById('f-date').value;
+  if(!m)return alert('请选择体验人');if(!w)return alert('请选择周次');if(!dt)return alert('请选择体验日期');
+  if(!selProps.size)return alert('请选择至少一个物业');if(ynVal===null)return alert('请选择较上次体验是否有改进');
+  const data=collect();const rec={...data,id:Date.now()};
+  records.push(rec);
+  try{localStorage.setItem(LS_REC,JSON.stringify(records));}catch(e){
+    rec.propPhotos={};records[records.length-1]=rec;
+    try{localStorage.setItem(LS_REC,JSON.stringify(records));}catch(e2){}
+    alert('照片因存储限制未保存，其余内容已保存。');
+  }
+  if(curDraftId){delete drafts[curDraftId];saveDrafts();}
+  document.getElementById('ov-msg').textContent=`${m} · ${w} · 「${[...selProps].join('、')}」`;
+  document.getElementById('overlay').classList.add('show');
+  resetUI();curDraftId=null;
+
+  // Upload to cloud in background
+  if(cloudEnabled){
+    updateSyncUI('loading');
+    cloudPushRecord(rec).then(()=>updateSyncUI('ok','记录已同步到云端')).catch(e=>updateSyncUI('err','云端同步失败'));
+  }
+}
+
+function resetUI(){
+  document.getElementById('f-member').value='';document.getElementById('f-note').value='';
+  document.getElementById('save-time').textContent='—';
+  selProps.clear();propRooms={};propPhotos={};ynVal=null;
+  document.querySelectorAll('.pchip').forEach(c=>c.classList.remove('on'));
+  document.getElementById('panels').innerHTML='';
+  document.getElementById('yn-yes').className='yn-btn';document.getElementById('yn-no').className='yn-btn';
+  document.getElementById('yn-detail').style.display='none';
+}
+
+function closeOverlay(){document.getElementById('overlay').classList.remove('show');goTo('home');renderHome();}
+
+// ════════════════════════════════
+//  LIGHTBOX
+// ════════════════════════════════
+function openLb(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('show');}
+function closeLb(){document.getElementById('lb').classList.remove('show');}
+
+// ════════════════════════════════
+//  TOAST
+// ════════════════════════════════
+function toast(msg){
+  let t=document.getElementById('_t');
+  if(!t){t=document.createElement('div');t.id='_t';t.style='position:fixed;bottom:108px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:9px 20px;border-radius:50px;font-size:13px;font-family:"Noto Sans SC",sans-serif;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';setTimeout(()=>t.style.opacity='0',1800);
+}
+
+// ════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════
+let _dashSynced = false;
+function renderDash(){
+  recFilter='all';roomPropFilter='all';
+  renderWeekFilters();renderRecList();renderRoomPropFilters();
+}
+function goTo_dash(){goTo('dashboard');renderDash();}
+
+function switchTab(tab){
+  dashTab=tab;
+  ['rec','room','stat'].forEach(t=>{
+    document.getElementById('view-'+t).style.display=t===tab?'':'none';
+    document.getElementById('dt-'+t).classList.toggle('on',t===tab);
+  });
+  if(tab==='rec')renderRecList();
+  else if(tab==='room')renderRoomView();
+  else renderStats();
+}
+
+/* ── Record list ── */
+function renderWeekFilters(){
+  const weeks=['all',...new Set(records.map(r=>r.week))].filter(Boolean);
+  const c=document.getElementById('week-filters');c.innerHTML='';
+  weeks.forEach(w=>{
+    const b=document.createElement('button');b.className='fchip'+(w===recFilter?' on':'');b.textContent=w==='all'?'全部':w;
+    b.onclick=()=>{recFilter=w;renderWeekFilters();renderRecList();};c.appendChild(b);
+  });
+}
+
+function renderCompletionSummary(filteredWeeks){
+  // Build: week -> member -> [records]
+  const MEMBERS=['小楠','小鹏','小林','Cara','仙仙','Debbie','胡'];
+  const byWeek={};
+  records.forEach(r=>{
+    if(!r.week)return;
+    if(!byWeek[r.week])byWeek[r.week]={};
+    if(!byWeek[r.week][r.member])byWeek[r.week][r.member]=[];
+    byWeek[r.week][r.member].push(r);
+  });
+
+  // Which weeks to show
+  const weeks=filteredWeeks==='all'
+    ?Object.keys(byWeek).sort()
+    :[filteredWeeks].filter(w=>byWeek[w]);
+  if(!weeks.length)return null;
+
+  const card=document.createElement('div');card.className='completion-card';
+  const hdrId='comp-hdr';
+  card.innerHTML=`
+    <div class="completion-hdr" id="${hdrId}" onclick="toggleComp()">
+      <div><div class="completion-hdr-title">📋 成员提交完成情况</div><div class="completion-hdr-sub">✓ 已提交 &nbsp; ✗ 未提交</div></div>
+      <span class="cc">▼</span>
+    </div>
+    <div class="completion-body" id="comp-body">
+      ${weeks.map(w=>{
+        const wdata=byWeek[w]||{};
+        const done=MEMBERS.filter(m=>wdata[m]);
+        const pct=Math.round(done.length/MEMBERS.length*100);
+        const memberHTML=MEMBERS.map(m=>{
+          const recs=wdata[m]||[];
+          const isDone=recs.length>0;
+          const props=recs.flatMap(r=>r.properties||[]);
+          const uniqProps=[...new Set(props)];
+          return`<div class="member-check ${isDone?'done':'miss'}">
+            <span class="ck-icon">${isDone?'✓':'✗'}</span>
+            <div>
+              <div class="ck-name">${m}</div>
+              ${isDone?`<div class="ck-props">${uniqProps.join('、')}</div>`:''}
+            </div>
+          </div>`;
+        }).join('');
+        return`<div class="week-completion-row">
+          <div class="week-label">${w}</div>
+          <div class="week-progress">
+            <div class="week-prog-bar"><div class="week-prog-fill" style="width:${pct}%"></div></div>
+            <span class="week-prog-txt">${done.length}/${MEMBERS.length} 已提交</span>
+          </div>
+          <div class="member-checks">${memberHTML}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+  return card;
+}
+
+function toggleComp(){
+  const hdr=document.getElementById('comp-hdr');
+  const body=document.getElementById('comp-body');
+  if(!hdr||!body)return;
+  const c=hdr.classList.toggle('collapsed');
+  body.classList.toggle('hidden',c);
+}
+
+function renderRecList(){
+  const c=document.getElementById('rec-list');
+  const data=recFilter==='all'?records:records.filter(r=>r.week===recFilter);
+  c.innerHTML='';
+
+  // Completion summary first
+  const summary=renderCompletionSummary(recFilter);
+  if(summary)c.appendChild(summary);
+
+  if(!data.length){
+    const empty=document.createElement('div');
+    empty.className='empty-s';
+    empty.innerHTML='<div class="ei">📋</div><h3>暂无记录</h3><p>还没有体验记录，回首页提交吧。</p>';
+    c.appendChild(empty);return;
+  }
+
+  [...data].reverse().forEach((r,idx)=>{
+    const card=document.createElement('div');card.className='rec-card';
+    const rid = 'r'+idx; // simple index-based ID, no precision issues
+    const fp=(r.properties||[])[0];
+    const fpd=fp&&r.propDims&&r.propDims[fp]||{};
+    const prevD=DIMS.filter(d=>fpd[d.k]).slice(0,2);
+    const prevHTML=prevD.length
+      ?`<div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:5px;">🏠 ${fp}</div>`
+        +prevD.map(d=>`<div class="prow"><span class="plbl">${d.ic} ${d.lb}</span><span class="ptxt">${trunc(fpd[d.k],38)}</span></div>`).join('')
+      :'<span style="font-size:12px;color:#ccc">暂无体验内容</span>';
+
+    const expHTML=(r.properties||[]).map(p=>{
+      const pd=r.propDims&&r.propDims[p]||{};
+      const rooms=(r.propRooms&&r.propRooms[p])||[];
+      const rbadges=rooms.map(rm=>`<span class="room-badge">🚪${rm}室</span>`).join('');
+      const dimRows=DIMS.map(d=>{const v=pd[d.k]||'';return`<div class="dim-exp-row"><span class="del">${d.ic} ${d.lb}</span><span class="det ${v?'':'empty'}">${v||'未填写'}</span></div>`;}).join('');
+      const photos=(r.propPhotos&&r.propPhotos[p])||[];
+      const photoSrcs=photos.map(x=>typeof x==='string'?x:(x&&x.src)||null).filter(Boolean);
+      const pHTML=photoSrcs.length?`<div class="photo-gal">${photoSrcs.map(u=>`<img src="${u}" onclick="openLb('${u}')">`).join('')}</div>`:'';
+      return`<div style="margin-bottom:14px"><div class="prop-exp-head">🏠 ${p}${rbadges}</div><div>${dimRows}</div>${pHTML}</div>`;
+    }).join('');
+
+    const nb=r.note?`<div style="margin-top:9px;font-size:12px;color:var(--danger);border-top:1px solid var(--border);padding-top:9px;">⚠️ 未改进：${r.note}</div>`:'';
+    const ib=r.improved?`<span style="display:inline-block;margin-top:4px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:${r.improved==='yes'?'#E8F8EE':'#FDECEA'};color:${r.improved==='yes'?'#1A7A40':'#C0392B'};">${r.improved==='yes'?'✅ 有改进':'❌ 无改进'}</span>`:'';
+
+    card.innerHTML=`
+      <div class="rec-hdr">
+        <div>
+          <div class="rec-name">${r.member}</div>
+          <div class="rec-meta">${r.week} · ${r.date}</div>
+          <div class="rec-meta" style="margin-top:3px;color:var(--primary);font-weight:600">${(r.properties||[]).join(' · ')}</div>
+          ${ib}
+        </div>
+        <div class="rec-pill">${(r.properties||[]).length}处</div>
+      </div>
+      <div class="preview-rows">${prevHTML}</div>
+      <div class="rec-expand" id="ex-${rid}">${expHTML}${nb}</div>
+    `;
+    // Create toggle button with direct event listener (not inline onclick)
+    const togBtn=document.createElement('button');
+    togBtn.className='tog';
+    togBtn.textContent='▼ 查看完整记录';
+    togBtn.addEventListener('click',function(){
+      const exp=document.getElementById('ex-'+rid);
+      if(!exp)return;
+      const open=exp.classList.toggle('open');
+      this.textContent=open?'▲ 收起':'▼ 查看完整记录';
+    });
+    card.appendChild(togBtn);
+    c.appendChild(card);
+  });
+}
+
+function trunc(s,n){return s&&s.length>n?s.slice(0,n)+'…':s||'';}
+
+/* ── Room problem view ── */
+
+// Cache: propName -> { result, ts }
+const aiCache = {};
+
+function renderRoomPropFilters(){
+  const allProps=PROPS.filter(p=>records.some(r=>(r.properties||[]).includes(p)&&((r.propRooms&&r.propRooms[p])||[]).length));
+  const opts=['all',...allProps];
+  const c=document.getElementById('room-prop-filters');c.innerHTML='';
+  opts.forEach(p=>{
+    const b=document.createElement('button');b.className='fchip'+(p===roomPropFilter?' on':'');b.textContent=p==='all'?'全部物业':p;
+    b.onclick=()=>{roomPropFilter=p;renderRoomPropFilters();renderRoomView();};c.appendChild(b);
+  });
+}
+
+function buildRoomIdx(propFilter){
+  const idx={};
+  records.forEach(r=>{
+    (r.properties||[]).forEach(p=>{
+      if(propFilter&&propFilter!=='all'&&p!==propFilter)return;
+      const rooms=(r.propRooms&&r.propRooms[p])||[];
+      if(!rooms.length)return;
+      const pd=r.propDims&&r.propDims[p]||{};
+      if(!idx[p])idx[p]={};
+      rooms.forEach(room=>{
+        if(!idx[p][room])idx[p][room]=[];
+        const dimEntries={};
+        DIMS.forEach(d=>{const v=pd[d.k]||'';if(v)dimEntries[d.k]=v;});
+        idx[p][room].push({member:r.member,date:r.date,week:r.week,dims:dimEntries});
+      });
+    });
+  });
+  return idx;
+}
+
+function renderRoomView(){
+  const c=document.getElementById('room-list');
+  const idx=buildRoomIdx(roomPropFilter);
+  const propNames=Object.keys(idx).filter(p=>Object.keys(idx[p]).length);
+
+  if(!propNames.length){
+    c.innerHTML=`<div class="empty-s"><div class="ei">🚪</div><h3>暂无房间问题记录</h3><p>提交体验时填写房间号后，相关问题会在这里汇总。</p></div>`;
+    return;
+  }
+  c.innerHTML='';
+
+  // AI analyse button
+  const btnWrap=document.createElement('div');
+  btnWrap.innerHTML=`
+    <button class="ai-btn" id="ai-analyse-btn" onclick="runAIAnalysis()">
+      <span class="ai-icon">✨</span> AI 智能提取房间问题
+    </button>
+    <div id="ai-error-msg" style="display:none" class="ai-error"></div>
+  `;
+  c.appendChild(btnWrap);
+
+  // Raw data section (always visible as fallback)
+  const rawSection=document.createElement('div');rawSection.id='raw-room-section';
+  propNames.forEach(p=>{
+    const propCard=document.createElement('div');propCard.className='prop-stat-card';
+    const roomNums=Object.keys(idx[p]).sort();
+    const totalEntries=roomNums.reduce((s,r)=>s+idx[p][r].length,0);
+    propCard.innerHTML=`<div class="prop-stat-title">🏠 ${p} <span style="font-size:12px;font-weight:400;color:var(--muted)">· ${roomNums.length}个房间 · ${totalEntries}次记录</span></div>`;
+    roomNums.forEach(room=>{
+      const entries=idx[p][room];
+      const dimAgg={};
+      entries.forEach(e=>Object.entries(e.dims).forEach(([k,v])=>{if(!dimAgg[k])dimAgg[k]=[];dimAgg[k].push({text:v,member:e.member,date:e.date});}));
+      const dimsWithData=DIMS.filter(d=>dimAgg[d.k]);
+      const members=[...new Set(entries.map(e=>e.member))].join('、');
+      const latestDate=entries.map(e=>e.date).sort().reverse()[0];
+      const dimHTML=dimsWithData.map(d=>{
+        const items=dimAgg[d.k];
+        const bodyHTML=items.length===1
+          ?`<div style="font-size:12px;color:var(--text);line-height:1.6">${items[0].text}</div>`
+          :items.map((it,i)=>`<div style="margin-bottom:${i<items.length-1?'7px':'0'}"><div style="font-size:10px;color:var(--muted);margin-bottom:1px">${it.member} · ${it.date}</div><div style="font-size:12px;color:var(--text);line-height:1.6">${it.text}</div></div>`).join('');
+        return`<div class="room-stat-dim"><div class="room-stat-dim-lbl">${d.ic} ${d.lb}</div><div class="room-stat-dim-txt">${bodyHTML}</div></div>`;
+      }).join('');
+      const ri=document.createElement('div');ri.className='room-stat-item';
+      ri.innerHTML=`<div class="room-stat-hdr"><div class="room-stat-num">🚪 ${room}室</div><div style="font-size:11px;color:var(--muted)">${members} · ${entries.length}次体验 · 最近 ${latestDate}</div></div>${dimsWithData.length?`<div class="room-stat-body">${dimHTML}</div>`:'<div style="font-size:12px;color:#bbb;padding:6px 0">暂无内容</div>'}`;
+      propCard.appendChild(ri);
+    });
+    rawSection.appendChild(propCard);
+  });
+  c.appendChild(rawSection);
+
+  // AI results section (shown after AI runs)
+  const aiSection=document.createElement('div');aiSection.id='ai-room-section';aiSection.style.display='none';
+  c.appendChild(aiSection);
+
+  // If we have cached results, show them immediately
+  const cacheKey=roomPropFilter;
+  if(aiCache[cacheKey]){
+    renderAIResults(aiCache[cacheKey],idx);
+  }
+}
+
+async function runAIAnalysis(){
+  const btn=document.getElementById('ai-analyse-btn');
+  const errEl=document.getElementById('ai-error-msg');
+  const aiSec=document.getElementById('ai-room-section');
+  const rawSec=document.getElementById('raw-room-section');
+  if(!btn||!aiSec)return;
+
+  const idx=buildRoomIdx(roomPropFilter);
+  const propNames=Object.keys(idx).filter(p=>Object.keys(idx[p]).length);
+  if(!propNames.length)return;
+
+  btn.disabled=true;btn.innerHTML=`<span class="ai-spinner"></span> 分析中...`;
+  errEl.style.display='none';
+  aiSec.style.display='none';
+
+  // Build prompt
+  const dimNames={};DIMS.forEach(d=>dimNames[d.k]=d.lb);
+  const inputData=[];
+  propNames.forEach(p=>{
+    const roomNums=Object.keys(idx[p]).sort();
+    const roomsData=[];
+    roomNums.forEach(room=>{
+      const entries=idx[p][room];
+      // Collect all dim text for this property (not per-room — the text may mention multiple rooms)
+      const allDimText={};
+      // Also collect text that mentions this room number specifically
+      entries.forEach(e=>{
+        Object.entries(e.dims).forEach(([k,v])=>{
+          if(!allDimText[k])allDimText[k]=[];
+          allDimText[k].push(v);
+        });
+      });
+      roomsData.push({room,dims:allDimText});
+    });
+
+    // Also get the raw text for all dims (across all entries for this prop)
+    const allText={};
+    roomNums.forEach(room=>{
+      idx[p][room].forEach(e=>{
+        Object.entries(e.dims).forEach(([k,v])=>{
+          if(!allText[k])allText[k]=[];
+          allText[k].push(v);
+        });
+      });
+    });
+
+    inputData.push({
+      prop:p,
+      rooms:roomNums,
+      dims:Object.entries(allText).map(([k,texts])=>({dim:dimNames[k]||k,text:texts.join(' | ')}))
+    });
+  });
+
+  const prompt=`你是一个民宿管理助手，帮助分析房间体验记录。
+
+以下是体验记录数据，每个物业记录了多个房间号（成员体验时标注），以及各个维度的填写内容（文字中可能直接提及房间号，如"301有头发，505浴室脏"）。
+
+请按以下规则处理：
+1. 仔细阅读每个维度的文字内容
+2. 识别文字中明确提到的房间号对应的问题（如"301有头发"→ 301室，干净程度，有头发）
+3. 如果某段文字没有提到具体房间号，则归类为"通用问题"（适用于本物业所有房间）
+4. 对于写了"ok"、"没问题"等正面评价的，标记为正常，不列为问题
+5. 只提取真实存在的问题，不要捏造
+
+输入数据：
+${JSON.stringify(inputData,null,2)}
+
+请返回严格的JSON格式，不要有任何其他文字：
+{
+  "properties": [
+    {
+      "prop": "物业名",
+      "rooms": [
+        {
+          "room": "301",
+          "issues": [
+            {"dim": "维度名", "problem": "具体问题描述"}
+          ],
+          "ok_dims": ["维度名1","维度名2"]
+        }
+      ],
+      "general_issues": [
+        {"dim": "维度名", "problem": "通用问题描述"}
+      ]
+    }
+  ]
+}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(!res.ok)throw new Error('API请求失败: '+res.status);
+    const data=await res.json();
+    const text=data.content.map(b=>b.text||'').join('');
+    const clean=text.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+
+    // Cache result
+    aiCache[roomPropFilter]=parsed;
+    renderAIResults(parsed,idx);
+    rawSec.style.display='none';
+    btn.innerHTML=`<span class="ai-icon">✨</span> 重新分析`;
+    btn.disabled=false;
+  }catch(e){
+    errEl.textContent='分析失败：'+e.message+'。请检查网络或稍后重试。';
+    errEl.style.display='block';
+    btn.innerHTML=`<span class="ai-icon">✨</span> AI 智能提取房间问题`;
+    btn.disabled=false;
+    rawSec.style.display='block';
+  }
+}
+
+function renderAIResults(parsed,idx){
+  const aiSec=document.getElementById('ai-room-section');
+  const rawSec=document.getElementById('raw-room-section');
+  if(!aiSec)return;
+  aiSec.innerHTML='';
+  aiSec.style.display='block';
+  rawSec.style.display='none';
+
+  (parsed.properties||[]).forEach(propData=>{
+    const p=propData.prop;
+    const propRoomNums=Object.keys(idx[p]||{}).sort();
+    const totalEntries=propRoomNums.reduce((s,r)=>s+(idx[p][r]||[]).length,0);
+
+    const card=document.createElement('div');card.className='ai-result-card';
+    card.innerHTML=`
+      <div class="ai-result-prop-head">
+        <span class="ai-result-prop-name">🏠 ${p}</span>
+        <span class="ai-result-prop-meta">${propRoomNums.length}个房间 · ${totalEntries}次记录</span>
+      </div>
+      <div class="ai-result-body" id="ai-body-${p.replace(/[^a-zA-Z0-9]/g,'_')}"></div>
+    `;
+    aiSec.appendChild(card);
+    const body=document.getElementById('ai-body-'+p.replace(/[^a-zA-Z0-9]/g,'_'));
+
+    // General issues first
+    const genIssues=propData.general_issues||[];
+    if(genIssues.length){
+      const genBlock=document.createElement('div');genBlock.className='ai-room-block';
+      genBlock.innerHTML=`<div class="ai-room-label">🏠 通用问题（所有房间）</div>
+        <div class="ai-issue-list">${genIssues.map(i=>`
+          <div class="ai-issue-item">
+            <span class="ai-issue-icon">⚠️</span>
+            <div class="ai-issue-content">
+              <div class="ai-issue-dim">${i.dim}</div>
+              <div class="ai-issue-text">${i.problem}</div>
+            </div>
+          </div>`).join('')}</div>`;
+      body.appendChild(genBlock);
+    }
+
+    // Per-room
+    (propData.rooms||[]).forEach(roomData=>{
+      const room=roomData.room;
+      const issues=roomData.issues||[];
+      const okDims=roomData.ok_dims||[];
+      const block=document.createElement('div');block.className='ai-room-block';
+
+      const issueHTML=issues.map(i=>`
+        <div class="ai-issue-item">
+          <span class="ai-issue-icon">⚠️</span>
+          <div class="ai-issue-content">
+            <div class="ai-issue-dim">${i.dim}</div>
+            <div class="ai-issue-text">${i.problem}</div>
+          </div>
+        </div>`).join('');
+
+      const okHTML=okDims.length?`<div class="ai-ok-item">✓ 无问题：${okDims.join('、')}</div>`:'';
+
+      block.innerHTML=`
+        <div class="ai-room-label">🚪 ${room}室</div>
+        <div class="ai-issue-list">
+          ${issues.length?issueHTML:''}
+          ${okHTML}
+          ${!issues.length&&!okDims.length?'<div style="font-size:12px;color:#bbb">暂无记录</div>':''}
+        </div>`;
+      body.appendChild(block);
+    });
+
+    // Raw data toggle
+    const tog=document.createElement('button');tog.className='raw-toggle';
+    tog.textContent='查看原始填写内容';
+    tog.onclick=()=>{
+      rawSec.style.display=rawSec.style.display==='none'?'block':'none';
+      tog.textContent=rawSec.style.display==='none'?'查看原始填写内容':'隐藏原始填写内容';
+    };
+    body.appendChild(tog);
+  });
+}
+
+/* ── Stats overview ── */
+function renderStats(){
+  const total=records.length,weeks=new Set(records.map(r=>r.week)).size,members=new Set(records.map(r=>r.member)).size;
+  document.getElementById('stat-top').innerHTML=`
+    <div class="stat-card"><div class="sn">${total}</div><div class="sl">总提交次数</div></div>
+    <div class="stat-card"><div class="sn">${weeks}</div><div class="sl">已覆盖周次</div></div>
+    <div class="stat-card"><div class="sn">${members}</div><div class="sl">参与成员</div></div>
+  `;
+  if(!records.length){document.getElementById('stat-detail').innerHTML='<div class="empty-s"><div class="ei">📊</div><h3>暂无数据</h3></div>';return;}
+  const pc={};records.forEach(r=>(r.properties||[]).forEach(p=>pc[p]=(pc[p]||0)+1));
+  const mp=Math.max(...Object.values(pc),1);
+  const prows=PROPS.filter(p=>pc[p]).sort((a,b)=>pc[b]-pc[a]).map(p=>`<div class="bar-row"><span class="bar-lbl">${p}</span><div class="bar-track"><div class="bar-fill" style="width:${pc[p]/mp*100}%;background:var(--primary)"></div></div><span class="bar-val">${pc[p]}次</span></div>`).join('');
+  const mc={};records.forEach(r=>mc[r.member]=(mc[r.member]||0)+1);
+  const mm=Math.max(...Object.values(mc),1);
+  const mrows=Object.entries(mc).sort((a,b)=>b[1]-a[1]).map(([m,c])=>`<div class="bar-row"><span class="bar-lbl">${m}</span><div class="bar-track"><div class="bar-fill" style="width:${c/mm*100}%;background:var(--accent)"></div></div><span class="bar-val">${c}次</span></div>`).join('');
+  document.getElementById('stat-detail').innerHTML=`
+    <div class="scard" style="margin-bottom:12px"><div class="slabel">物业体验频次</div>${prows||'—'}</div>
+    <div class="scard"><div class="slabel">成员提交次数</div>${mrows||'—'}</div>
+  `;
+}
+
+// ════════════════════════════════
+//  EXPORT & PRINT  (AI-powered)
+// ════════════════════════════════
+let MEMBERS_LIST=['小楠','小鹏','小林','Cara','仙仙','Debbie','胡'];
+
+function openExportModal(){
+  const sel=document.getElementById('export-week-sel');
+  const weeks=[...new Set(records.map(r=>r.week))].filter(Boolean).sort();
+  sel.innerHTML='<option value="all">全部周次</option>';
+  weeks.forEach(w=>{const o=document.createElement('option');o.value=w;o.textContent=w;sel.appendChild(o);});
+  if(recFilter&&recFilter!=='all') sel.value=recFilter;
+  // Reset state
+  document.getElementById('export-ai-status').style.display='none';
+  document.getElementById('export-action-btns').style.display='flex';
+  document.getElementById('export-modal').classList.add('show');
+}
+function closeExportModal(){document.getElementById('export-modal').classList.remove('show');}
+
+function getExportRecords(){
+  const week=document.getElementById('export-week-sel').value;
+  return{data:week==='all'?records:records.filter(r=>r.week===week),week};
+}
+
+// ── Build structured data for AI prompt ──
+function buildExportContext(data){
+  const byWeek={};
+  data.forEach(r=>{
+    if(!byWeek[r.week])byWeek[r.week]=[];
+    byWeek[r.week].push(r);
+  });
+
+  const weeks=Object.keys(byWeek).sort();
+  const dimNames={};DIMS.forEach(d=>dimNames[d.k]=d.lb);
+
+  return weeks.map(w=>{
+    const recs=byWeek[w];
+    const submitted=recs.map(r=>r.member);
+    const missed=MEMBERS_LIST.filter(m=>!submitted.includes(m));
+
+    // Per-property aggregation: collect ALL text per dim, with member/room/date context
+    const propMap={};
+    recs.forEach(r=>{
+      (r.properties||[]).forEach(p=>{
+        if(!propMap[p])propMap[p]={entries:[]};
+        const prooms=(r.propRooms&&r.propRooms[p])||[];
+        const pd=r.propDims&&r.propDims[p]||{};
+        const dimData={};
+        DIMS.forEach(d=>{const v=pd[d.k]||'';if(v)dimData[d.lb]=v;});
+        propMap[p].entries.push({
+          member:r.member,
+          date:r.date,
+          rooms:prooms,
+          improved:r.improved==='yes'?'有改进':r.improved==='no'?'无改进':'未选',
+          note:r.note||'',
+          dims:dimData
+        });
+      });
+    });
+
+    return{
+      week:w,
+      submitted,
+      missed,
+      properties:Object.entries(propMap).map(([p,d])=>({name:p,entries:d.entries}))
+    };
+  });
+}
+
+// ── AI generate report ──
+async function doAIExport(){
+  const{data,week}=getExportRecords();
+  if(!data.length){alert('所选周次暂无记录');return;}
+
+  const statusEl=document.getElementById('export-ai-status');
+  const btnEl=document.getElementById('export-action-btns');
+  statusEl.style.display='flex';
+  btnEl.style.display='none';
+
+  const ctx=buildExportContext(data);
+  const weekLabel=week==='all'?'全部周次':week;
+  const now=new Date();
+  const dateStr=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+
+  const prompt=`你是一位民宿运营管理助手。我们团队定期派成员以「入住客人」的角度现场体验各物业房间，目的是：发现问题、查漏补缺，让管理层能够及时了解所有物业的真实现状并安排整改。
+
+请根据以下体验数据，生成一份面向管理层的周报。
+
+【核心原则】
+- 报告以「物业」为主线，不是以「成员」为主线
+- 重点突出：哪个物业、哪个房间、存在什么问题
+- 语言简洁直接，像内部工作报告，不要废话
+- 区分「需要整改的问题」和「表现正常的方面」
+- 如果成员填写了具体房间号，必须精确到房间
+
+【数据范围】
+周次：${weekLabel}
+生成日期：${dateStr}
+
+【原始体验数据】
+${JSON.stringify(ctx,null,2)}
+
+【报告结构要求】
+
+请严格按以下结构输出，使用Markdown格式：
+
+## 一、本期概况
+
+用2-3句话说明：本期共多少人提交记录、覆盖多少个物业、发现多少个需整改问题。未提交的成员直接点名。
+
+## 二、物业问题清单
+
+这是报告核心。按物业逐一列出，每个物业格式如下：
+
+### 🏠 [物业名称]
+**体验人：** [成员名] · [日期] · [房间号（如有）]
+
+**❗ 需整改问题：**
+- [房间号（如有）] [维度]：[具体问题描述]
+- [房间号（如有）] [维度]：[具体问题描述]
+
+**✅ 表现正常：**
+- [维度]：正常 / [简短说明]
+
+**改进情况：** [有改进 / 无改进 / 首次记录]
+
+---
+
+如果该物业本期没有发现问题，写"本期体验整体良好，无需整改事项"。
+
+重要规则：
+- 只有成员明确填写了有实质内容的才列出（"ok"、数字占位、测试内容不列为问题）
+- 文字中提到具体房间号的问题（如"301有头发"），必须标注房间号
+- 多位成员体验同一物业时，合并展示，注明各自的发现
+
+## 三、整改优先级排序
+
+列一个表格或清单，将本期所有问题按紧急程度排序：
+
+**🔴 高优先级（影响客人体验，需本周内处理）：**
+- [物业] [房间] [问题]
+
+**🟡 中优先级（影响舒适度，需本月内处理）：**
+- [物业] [房间] [问题]
+
+**🟢 低优先级（可持续改进）：**
+- [物业] [房间] [问题]
+
+## 四、持续未改进问题追踪
+
+列出成员明确标注「无改进」且说明了具体问题的条目。如无，写"本期无持续未改进问题记录"。
+
+直接输出报告正文，不要加任何前缀或说明。`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:4000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(!res.ok)throw new Error('API错误 '+res.status);
+    const json=await res.json();
+    const reportText=json.content.map(b=>b.text||'').join('');
+
+    statusEl.style.display='none';
+    btnEl.style.display='flex';
+    closeExportModal();
+
+    const completionHTML=buildCompletionHTML(ctx);
+    const reportHTML=markdownToHTML(reportText);
+    downloadReport(completionHTML,reportHTML,weekLabel,dateStr,data);
+
+  }catch(e){
+    statusEl.innerHTML=`<span style="color:#C0392B;font-size:13px;">⚠️ 生成失败：${e.message}</span>`;
+    setTimeout(()=>{statusEl.style.display='none';btnEl.style.display='flex';},3000);
+  }
+}
+
+function buildCompletionHTML(ctx){
+  return ctx.map(wk=>`
+    <div class="completion-block">
+      <div class="block-title">📋 ${wk.week} · 成员提交情况 &nbsp;<span style="font-weight:400;color:#888;font-size:11px;">${wk.submitted.length}/${MEMBERS_LIST.length} 已提交${wk.missed.length?' · 未提交：'+wk.missed.join('、'):''}</span></div>
+      <div class="member-grid">
+        ${MEMBERS_LIST.map(m=>{
+          const submitted=wk.submitted.includes(m);
+          const recs=wk.properties.filter(p=>p.entries.some(e=>e.member===m));
+          const props=[...new Set(wk.properties.filter(p=>p.entries.some(e=>e.member===m)).map(p=>p.name))].join('、');
+          return`<div class="member-cell ${submitted?'done':'miss'}">
+            <div class="mc-icon">${submitted?'✓':'✗'}</div>
+            <div>
+              <div class="mc-name">${m}</div>
+              <div class="mc-props">${submitted?(props||'—'):'未提交'}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Markdown → HTML converter
+function markdownToHTML(md){
+  let html=md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'</div-p><h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'</div-p><h3>$1</h3>')
+    .replace(/^#### (.+)$/gm,'</div-p><h4>$1</h4>')
+    .replace(/^---$/gm,'<hr>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>');
+
+  // Process line by line for lists and paragraphs
+  const lines=html.split('\n');
+  const out=[];
+  let inUl=false, inOl=false;
+
+  lines.forEach(line=>{
+    const ulMatch=line.match(/^[-•]\s+(.+)$/);
+    const olMatch=line.match(/^\d+\.\s+(.+)$/);
+    if(ulMatch){
+      if(!inUl){out.push('<ul>');inUl=true;}
+      if(inOl){out.push('</ol>');inOl=false;}
+      out.push(`<li>${ulMatch[1]}</li>`);
+    } else if(olMatch){
+      if(!inOl){out.push('<ol>');inOl=true;}
+      if(inUl){out.push('</ul>');inUl=false;}
+      out.push(`<li>${olMatch[1]}</li>`);
+    } else {
+      if(inUl){out.push('</ul>');inUl=false;}
+      if(inOl){out.push('</ol>');inOl=false;}
+      if(!line.trim()||line.startsWith('<'))out.push(line);
+      else out.push(`<p>${line}</p>`);
+    }
+  });
+  if(inUl)out.push('</ul>');
+  if(inOl)out.push('</ol>');
+  return out.join('\n').replace(/<\/div-p>/g,'');
+}
+
+function downloadReport(completionHTML,reportHTML,weekLabel,dateStr,data){
+  const now=new Date();
+  const fn=`${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
+
+  const fullHTML=`<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>现地体验周报 ${weekLabel}</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans SC',sans-serif;background:#F7F5F0;color:#1A1A1A;padding:30px 20px;max-width:860px;margin:0 auto;font-size:14px;line-height:1.75;}
+.print-btn{display:block;width:fit-content;margin:0 auto 24px;padding:11px 28px;background:#2D4A3E;color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;}
+.report-header{text-align:center;padding:28px 20px 22px;background:#2D4A3E;border-radius:14px;margin-bottom:20px;}
+.report-header h1{font-size:24px;color:#fff;margin-bottom:6px;font-weight:700;}
+.report-header p{font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.04em;}
+.completion-block{background:#fff;border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.block-title{font-size:13px;font-weight:700;color:#2D4A3E;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E0D8CC;}
+.member-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.member-cell{display:flex;align-items:flex-start;gap:7px;padding:9px 10px;border-radius:8px;}
+.member-cell.done{background:#E8F8EE;}
+.member-cell.miss{background:#F5F5F5;}
+.mc-icon{font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.member-cell.done .mc-icon{color:#1A7A40;}
+.member-cell.miss .mc-icon{color:#ccc;}
+.mc-name{font-size:12px;font-weight:700;}
+.member-cell.done .mc-name{color:#1A7A40;}
+.member-cell.miss .mc-name{color:#aaa;}
+.mc-props{font-size:10px;color:#7ab88a;margin-top:1px;line-height:1.4;}
+.member-cell.miss .mc-props{color:#bbb;}
+.ai-report{background:#fff;border-radius:12px;padding:26px 28px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.ai-report h2{font-size:16px;font-weight:700;color:#fff;margin:24px 0 14px;padding:10px 16px;background:#2D4A3E;border-radius:8px;}
+.ai-report h2:first-child{margin-top:0;}
+.ai-report h3{font-size:15px;font-weight:700;color:#1A1A1A;margin:18px 0 10px;padding:8px 12px;background:#F0F5F2;border-left:3px solid #2D4A3E;border-radius:0 6px 6px 0;}
+.ai-report h4{font-size:13px;font-weight:700;color:#2D4A3E;margin:12px 0 6px;}
+.ai-report hr{border:none;border-top:1px solid #E8E4DC;margin:20px 0;}
+.ai-report p{font-size:13px;line-height:1.8;color:#2a2a2a;margin-bottom:8px;}
+.ai-report strong{color:#1A1A1A;font-weight:700;}
+.ai-report em{color:#555;font-style:normal;font-weight:600;}
+.ai-report ul{margin:6px 0 12px;padding:0;list-style:none;}
+.ai-report ul li{font-size:13px;line-height:1.75;color:#2a2a2a;padding:6px 10px 6px 14px;margin-bottom:4px;border-radius:6px;background:#F9F7F4;position:relative;}
+.ai-report ul li::before{content:'·';position:absolute;left:5px;color:#C8A96E;font-weight:700;font-size:16px;top:4px;}
+.ai-report ol{margin:6px 0 12px 16px;}
+.ai-report ol li{font-size:13px;line-height:1.75;color:#2a2a2a;margin-bottom:5px;}
+@media print{
+  body{background:#fff;padding:0;}
+  .print-btn{display:none;}
+  .completion-block,.ai-report{box-shadow:none;border:1px solid #ddd;}
+  .member-cell.done{background:#E8F8EE!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .member-cell.miss{background:#F5F5F5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ai-report h2{background:#2D4A3E!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ai-report h3{background:#F0F5F2!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ai-report ul li{background:#F9F7F4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .report-header{background:#2D4A3E!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  h2,h3{page-break-after:avoid;}
+  @page{margin:15mm 12mm;size:A4;}
+}
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">🖨️ 打印此报告</button>
+<div class="report-header">
+  <h1>现地体验周报</h1>
+  <p>周次：${weekLabel} &nbsp;·&nbsp; 生成日期：${dateStr} &nbsp;·&nbsp; 共 ${data.length} 份体验记录</p>
+</div>
+${completionHTML}
+<div class="ai-report">${reportHTML}</div>
+</body>
+</html>`;
+
+  const blob=new Blob([fullHTML],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`现地体验周报_${weekLabel}_${fn}.html`;
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast('周报已下载 📄');
+}
+
+// ════════════════════════════════
+//  ADMIN SYSTEM
+// ════════════════════════════════
+const LS_ADMIN_PW = 'iv5_admin_pw';
+const LS_MEMBERS  = 'iv5_members';
+const LS_PROPS    = 'iv5_props';
+const DEFAULT_PW  = 'admin888';
+
+let MEMBERS_DYN = [];
+let PROPS_DYN   = [];
+let isAdmin     = false;
+let adminRecFilterWeek = 'all';
+
+// Pending (unsaved) edits
+let pendingMembers = null; // null = no pending changes
+let pendingProps   = null;
+let pendingDelRecId = null;
+
+function loadDynConfig(){
+  try{ MEMBERS_DYN = JSON.parse(localStorage.getItem(LS_MEMBERS)||'null') || ['小楠','小鹏','小林','Cara','仙仙','Debbie','胡']; }
+  catch(e){ MEMBERS_DYN = ['小楠','小鹏','小林','Cara','仙仙','Debbie','胡']; }
+  try{ PROPS_DYN = JSON.parse(localStorage.getItem(LS_PROPS)||'null') || ['天下','天下3','岸里','花园1','花园2','难波1','难波2','难波3','难波4A','难波4B','黑门1','黑门2','黑门3','黑门4','道2','通2','今里','新大阪']; }
+  catch(e){ PROPS_DYN = ['天下','天下3','岸里','花园1','花园2','难波1','难波2','难波3','难波4A','难波4B','黑门1','黑门2','黑门3','黑门4','道2','通2','今里','新大阪']; }
+}
+function saveDynConfig(){
+  localStorage.setItem(LS_MEMBERS, JSON.stringify(MEMBERS_DYN));
+  localStorage.setItem(LS_PROPS,   JSON.stringify(PROPS_DYN));
+}
+
+// ── Auth ──
+function openAdminLogin(){
+  document.getElementById('admin-pw-input').value='';
+  document.getElementById('admin-pw-error').style.display='none';
+  document.getElementById('admin-login-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('admin-pw-input').focus(),300);
+}
+function closeAdminLogin(){ document.getElementById('admin-login-modal').classList.remove('show'); }
+
+function doAdminLogin(){
+  const pw=document.getElementById('admin-pw-input').value;
+  const stored=localStorage.getItem(LS_ADMIN_PW)||DEFAULT_PW;
+  if(pw===stored){
+    isAdmin=true; closeAdminLogin();
+    document.getElementById('admin-status-badge').style.display='flex';
+    goTo('admin-panel'); renderAdminPanel();
+  } else {
+    document.getElementById('admin-pw-error').style.display='block';
+    document.getElementById('admin-pw-input').value='';
+    document.getElementById('admin-pw-input').focus();
+  }
+}
+function adminLogout(){
+  isAdmin=false;
+  document.getElementById('admin-status-badge').style.display='none';
+  pendingMembers=null; pendingProps=null;
+  goTo('home');
+}
+
+// ── Render ──
+function renderAdminPanel(){
+  pendingMembers=null; pendingProps=null;
+  fillCloudInputs();
+  renderAdminMembers();
+  renderAdminProps();
+  renderAdminRecFilter();
+  renderAdminRecs();
+  renderAdminDrafts();
+}
+
+// ── Members (pending changes) ──
+function renderAdminMembers(){
+  const c=document.getElementById('admin-member-list'); c.innerHTML='';
+  const list = pendingMembers !== null ? pendingMembers : MEMBERS_DYN;
+  list.forEach(m=>{
+    const tag=document.createElement('span');
+    tag.className='admin-tag member-tag';
+    tag.id='mtag-'+m;
+    tag.innerHTML=`${m}<button class="del-tag" onclick="adminMarkDelMember('${m}')">×</button>`;
+    c.appendChild(tag);
+  });
+  // Show/hide save bar
+  const bar=document.getElementById('member-save-bar');
+  bar.classList.toggle('visible', pendingMembers!==null);
+}
+
+function adminMarkDelMember(m){
+  if(pendingMembers===null) pendingMembers=[...MEMBERS_DYN];
+  pendingMembers=pendingMembers.filter(x=>x!==m);
+  renderAdminMembers();
+}
+
+function adminAddMember(){
+  const inp=document.getElementById('admin-member-input');
+  const v=inp.value.trim(); if(!v)return;
+  const base = pendingMembers!==null ? pendingMembers : MEMBERS_DYN;
+  if(base.includes(v)){inp.value='';return;}
+  if(pendingMembers===null) pendingMembers=[...MEMBERS_DYN];
+  pendingMembers.push(v);
+  inp.value=''; renderAdminMembers();
+}
+
+function adminSaveMembers(){
+  MEMBERS_DYN=[...pendingMembers];
+  pendingMembers=null;
+  saveDynConfig(); refreshMemberSelect(); renderAdminMembers();
+  toast('成员名单已保存 ✓');
+}
+
+function adminDiscardMembers(){
+  pendingMembers=null; renderAdminMembers();
+}
+
+// ── Props (pending changes) ──
+function renderAdminProps(){
+  const c=document.getElementById('admin-prop-list'); c.innerHTML='';
+  const list = pendingProps!==null ? pendingProps : PROPS_DYN;
+  list.forEach(p=>{
+    const tag=document.createElement('span');
+    tag.className='admin-tag prop-tag';
+    tag.innerHTML=`${p}<button class="del-tag" onclick="adminMarkDelProp('${p}')">×</button>`;
+    c.appendChild(tag);
+  });
+  const bar=document.getElementById('prop-save-bar');
+  bar.classList.toggle('visible', pendingProps!==null);
+}
+
+function adminMarkDelProp(p){
+  if(pendingProps===null) pendingProps=[...PROPS_DYN];
+  pendingProps=pendingProps.filter(x=>x!==p);
+  renderAdminProps();
+}
+
+function adminAddProp(){
+  const inp=document.getElementById('admin-prop-input');
+  const v=inp.value.trim(); if(!v)return;
+  const base = pendingProps!==null ? pendingProps : PROPS_DYN;
+  if(base.includes(v)){inp.value='';return;}
+  if(pendingProps===null) pendingProps=[...PROPS_DYN];
+  pendingProps.push(v);
+  inp.value=''; renderAdminProps();
+}
+
+function adminSaveProps(){
+  PROPS_DYN=[...pendingProps];
+  pendingProps=null;
+  saveDynConfig(); refreshPropGrid(); renderAdminProps();
+  toast('物业列表已保存 ✓');
+}
+
+function adminDiscardProps(){
+  pendingProps=null; renderAdminProps();
+}
+
+// ── Refresh form controls ──
+function refreshMemberSelect(){
+  const sel=document.getElementById('f-member');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">选择成员</option>';
+  MEMBERS_DYN.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
+  sel.value=cur;
+  MEMBERS_LIST.length=0; MEMBERS_DYN.forEach(m=>MEMBERS_LIST.push(m));
+}
+function refreshPropGrid(){
+  const grid=document.getElementById('prop-grid'); grid.innerHTML='';
+  PROPS_DYN.forEach(p=>{
+    const b=document.createElement('button');b.type='button';b.className='pchip';b.textContent=p;b.id='pc-'+sid(p);
+    b.onclick=()=>{selProps.has(p)?(selProps.delete(p),b.classList.remove('on'),removePanel(p)):(selProps.add(p),b.classList.add('on'),addPanel(p));sched();};
+    grid.appendChild(b);
+  });
+  PROPS.length=0; PROPS_DYN.forEach(x=>PROPS.push(x));
+}
+
+// ── Records (inline confirm) ──
+function renderAdminRecFilter(){
+  const weeks=['all',...new Set(records.map(r=>r.week))].filter(Boolean);
+  const c=document.getElementById('admin-rec-filter'); c.innerHTML='';
+  weeks.forEach(w=>{
+    const b=document.createElement('button');
+    b.className='fchip'+(w===adminRecFilterWeek?' on':'');
+    b.textContent=w==='all'?'全部':w;
+    b.onclick=()=>{adminRecFilterWeek=w;renderAdminRecFilter();renderAdminRecs();};
+    c.appendChild(b);
+  });
+}
+
+function renderAdminRecs(){
+  const c=document.getElementById('admin-rec-list'); c.innerHTML='';
+  const data=adminRecFilterWeek==='all'?records:records.filter(r=>r.week===adminRecFilterWeek);
+  if(!data.length){c.innerHTML='<div style="font-size:12px;color:#bbb;padding:8px 0">暂无记录</div>';return;}
+  [...data].reverse().forEach(r=>{
+    const item=document.createElement('div'); item.className='admin-rec-item';
+    const rooms=Object.values(r.propRooms||{}).flat();
+    item.innerHTML=`
+      <div class="admin-rec-info">
+        <div class="ari-name">${r.member}</div>
+        <div class="ari-meta">${r.week} · ${r.date} · ${(r.properties||[]).join('、')}${rooms.length?' · 🚪'+rooms.join('、')+'室':''}</div>
+      </div>
+      <button class="admin-del-btn" onclick="showRecConfirm(${r.id},'${r.member} · ${r.week}')">删除</button>
+    `;
+    c.appendChild(item);
+  });
+  // hide confirm if visible
+  hideRecConfirm();
+}
+
+function showRecConfirm(id, label){
+  pendingDelRecId=id;
+  document.getElementById('rec-confirm-msg').textContent=`确认删除「${label}」的记录？`;
+  document.getElementById('rec-confirm').classList.add('show');
+}
+function hideRecConfirm(){
+  pendingDelRecId=null;
+  document.getElementById('rec-confirm').classList.remove('show');
+}
+function doDelRecord(){
+  if(pendingDelRecId===null)return;
+  const id=pendingDelRecId;
+  records=records.filter(r=>r.id!==id);
+  try{localStorage.setItem(LS_REC,JSON.stringify(records));}catch(e){}
+  pendingDelRecId=null;
+  hideRecConfirm();
+  renderAdminRecFilter(); renderAdminRecs();
+  toast('记录已删除 ✓');
+  if(cloudEnabled) cloudDeleteRecord(id).catch(()=>{});
+}
+
+// ── Drafts ──
+function renderAdminDrafts(){
+  const c=document.getElementById('admin-draft-list'); c.innerHTML='';
+  const ids=Object.keys(drafts);
+  if(!ids.length){c.innerHTML='<div style="font-size:12px;color:#bbb">暂无草稿</div>';return;}
+  ids.sort((a,b)=>(drafts[b]._at||'').localeCompare(drafts[a]._at||'')).forEach(id=>{
+    const d=drafts[id];
+    const item=document.createElement('div');item.className='admin-rec-item';
+    item.innerHTML=`
+      <div class="admin-rec-info">
+        <div class="ari-name">${d.member||'未署名'} · ${d.week||'未选周次'}</div>
+        <div class="ari-meta">${(d.properties||[]).join('、')||'未选物业'}${d._at?' · '+fmtT(d._at):''}</div>
+      </div>
+      <button class="admin-del-btn" onclick="adminDelDraft('${id}')">删除</button>
+    `;
+    c.appendChild(item);
+  });
+}
+function adminDelDraft(id){
+  delete drafts[id]; saveDrafts(); renderAdminDrafts(); renderHome();
+  toast('草稿已删除 ✓');
+}
+function showDraftConfirm(){ document.getElementById('draft-confirm').classList.add('show'); }
+function hideDraftConfirm(){ document.getElementById('draft-confirm').classList.remove('show'); }
+function doAdminClearDrafts(){
+  drafts={}; saveDrafts(); hideDraftConfirm(); renderAdminDrafts(); renderHome();
+  toast('所有草稿已清除 ✓');
+}
+
+// ── Password ──
+function adminChangePw(){
+  const old=document.getElementById('pw-old').value;
+  const nw =document.getElementById('pw-new').value;
+  const cf =document.getElementById('pw-confirm').value;
+  const stored=localStorage.getItem(LS_ADMIN_PW)||DEFAULT_PW;
+  const msg=document.getElementById('pw-msg'); msg.style.display='block';
+  if(old!==stored){msg.style.color='var(--danger)';msg.textContent='当前密码不正确';return;}
+  if(!nw||nw.length<4){msg.style.color='var(--danger)';msg.textContent='新密码至少需要4位';return;}
+  if(nw!==cf){msg.style.color='var(--danger)';msg.textContent='两次密码不一致';return;}
+  localStorage.setItem(LS_ADMIN_PW,nw);
+  msg.style.color='var(--green)';msg.textContent='密码修改成功 ✓';
+  ['pw-old','pw-new','pw-confirm'].forEach(id=>document.getElementById(id).value='');
+  setTimeout(()=>msg.style.display='none',2500);
+}
+
+// ── Clear all records ──
+function showAllRecConfirm(){ document.getElementById('allrec-confirm').classList.add('show'); }
+function hideAllRecConfirm(){ document.getElementById('allrec-confirm').classList.remove('show'); }
+function doAdminClearAllRecords(){
+  records=[]; localStorage.setItem(LS_REC,JSON.stringify(records));
+  hideAllRecConfirm(); renderAdminRecFilter(); renderAdminRecs();
+  toast('所有记录已清空 ✓');
+}
+
+// ════════════════════════════════
+//  CLOUD SYNC (Google Apps Script)
+// ════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwAigJMYZFdcrlIK0f4cy1lrJgKLkYiM0Yc0e6qHnQLOUxMIH_YN1c6ak9h48jCrqo_LQ/exec';
+let cloudEnabled = true; // always on — Google Sheets backend
+
+function loadCloudConfig(){
+  cloudEnabled = true;
+  updateSyncUI();
+  document.getElementById('dash-sync-btn').style.display='flex';
+}
+
+function updateSyncUI(state='', msg=''){
+  const bar = document.getElementById('sync-status-bar');
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  if(!bar)return;
+  if(state==='loading'){ bar.className='sync-bar loading'; dot.className='sync-dot loading'; lbl.textContent='同步中…'; }
+  else if(state==='ok'){  bar.className='sync-bar ok';      dot.className='sync-dot ok';      lbl.textContent=msg||'云端已同步'; }
+  else if(state==='err'){ bar.className='sync-bar err';     dot.className='sync-dot err';     lbl.textContent=msg||'同步失败'; }
+  else { bar.className='sync-bar ok'; dot.className='sync-dot ok'; lbl.textContent='Google Sheets 云端已连接'; }
+}
+
+// ── Push one record to Google Sheets ──
+async function cloudPushRecord(rec){
+  const payload = {
+    action: 'addRecord',
+    record: {
+      id: String(rec.id),
+      member: rec.member,
+      week: rec.week,
+      date: rec.date,
+      properties: rec.properties || [],
+      propRooms: rec.propRooms || {},
+      propDims: rec.propDims || {},
+      improved: rec.improved || '',
+      note: rec.note || ''
+    }
+  };
+  const res = await fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  });
+  if(!res.ok) throw new Error('上传失败: ' + res.status);
+  return res.json();
+}
+
+// ── Pull all records from Google Sheets ──
+async function cloudPullRecords(){
+  const res = await fetch(GAS_URL + '?action=getRecords');
+  if(!res.ok) throw new Error('拉取失败: ' + res.status);
+  const data = await res.json();
+  return (data.records || []).map(r=>({
+    id:         String(r.id),
+    member:     r.member || '',
+    week:       r.week || '',
+    date:       r.date || '',
+    properties: r.properties || [],
+    propRooms:  r.propRooms || {},
+    propDims:   r.propDims || {},
+    propPhotos: {},
+    improved:   r.improved || null,
+    note:       r.note || ''
+  }));
+}
+
+// ── Delete one record from Google Sheets ──
+async function cloudDeleteRecord(id){
+  const payload = { action: 'deleteRecord', id: String(id) };
+  await fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  });
+}
+
+// ── Sync: pull latest from cloud ──
+let _syncing = false;
+async function syncFromCloud(){
+  if(_syncing) return;
+  _syncing = true;
+  updateSyncUI('loading');
+  try{
+    const cloudRecs = await cloudPullRecords();
+    const localPhotos = {};
+    records.forEach(r=>{ if(r.propPhotos && Object.keys(r.propPhotos).length) localPhotos[r.id]=r.propPhotos; });
+    records = cloudRecs.map(r=>({ ...r, propPhotos: localPhotos[r.id]||{} }));
+    try{ localStorage.setItem(LS_REC, JSON.stringify(records)); }catch(e){}
+    updateSyncUI('ok', `已同步 ${records.length} 条记录`);
+    if(document.getElementById('dashboard').classList.contains('active')){
+      renderWeekFilters(); renderRecList(); renderRoomPropFilters();
+    }
+    toast('云端数据已同步 ✓');
+  }catch(e){
+    updateSyncUI('err', '同步失败');
+  }
+  _syncing = false;
+}
+
+// fillCloudInputs no longer needed but keep as empty for compatibility
+function fillCloudInputs(){}
+
+init();
+</script>
+<!-- Hidden print area, only shown during print -->
+<div id="print-area" style="display:none"></div>
+
+</body>
+</html>
