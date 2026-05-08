@@ -113,6 +113,14 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .pdrive-badge{position:absolute;bottom:3px;left:3px;background:rgba(66,133,244,.85);border-radius:4px;padding:1px 4px;font-size:9px;color:#fff;font-weight:700;}
 .pthumb-uploading{opacity:.6;}
 .pthumb-uploading::after{content:'上传中…';position:absolute;inset:0;background:rgba(0,0,0,.45);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;border-radius:8px;}
+.room-dim-block{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;margin-top:12px;overflow:hidden;}
+.room-dim-block-hdr{display:flex;align-items:center;padding:10px 14px;background:var(--primary);gap:8px;}
+.room-dim-block-hdr input{flex:1;background:rgba(255,255,255,.15);border:none;border-radius:7px;padding:5px 10px;font-size:13px;font-weight:700;color:#fff;font-family:'Noto Sans SC',sans-serif;outline:none;}
+.room-dim-block-hdr input::placeholder{color:rgba(255,255,255,.5);}
+.room-dim-block-del{background:none;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:0 4px;line-height:1;}
+.room-dim-block-body{padding:0 14px 10px;}
+.add-room-block-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:11px;border:2px dashed var(--border);border-radius:11px;background:none;color:var(--accent);font-size:13px;font-weight:700;font-family:'Noto Sans SC',sans-serif;cursor:pointer;transition:all .2s;}
+.add-room-block-btn:hover{border-color:var(--primary);color:var(--primary);background:#f0f5f2;}
 .upload-progress{margin-top:6px;height:3px;background:var(--border);border-radius:3px;overflow:hidden;display:none;}
 .upload-progress.show{display:block;}
 .upload-progress-bar{height:100%;background:#4285F4;border-radius:3px;transition:width .3s;}
@@ -680,12 +688,12 @@ const WEEKS=['第一周','第二周','第三周','第四周'];
 const DIMS=[
   {k:'env',     ic:'🌿',lb:'整体环境观感',   ph:'描述整体氛围、装修风格、入住第一印象...'},
   {k:'checkin', ic:'🔑',lb:'入住便利度',     ph:'取钥匙/密码锁流程是否顺畅，指引是否清晰...'},
-  {k:'clean',   ic:'🧹',lb:'房间干净程度',   ph:'地面、床铺、桌面、厨房、卫生间等清洁情况（复数房间需标明房间号）...'},
-  {k:'amenity', ic:'🧴',lb:'日用品备置',     ph:'洗漱用品、卫生纸、垃圾袋、厨房用品等是否齐全（复数房间需标明房间号）...'},
-  {k:'smell',   ic:'🌸',lb:'气味 / 空气质量',ph:'有无异味、霉味、香烟味（复数房间需标明房间号）...'},
-  {k:'facility',ic:'🛋️',lb:'设施完好度',     ph:'家具、电器、卫浴设备是否正常运作（复数房间需标明房间号）...'},
-  {k:'wifi',    ic:'📶',lb:'WiFi 网络',      ph:'网络速度、稳定性（复数房间需标明房间号）...'},
-  {k:'other',   ic:'💬',lb:'其他建议',        ph:'任何其他值得记录的体验或改进建议（复数房间需标明房间号）...'},
+  {k:'clean',   ic:'🧹',lb:'房间干净程度',   ph:'地面、床铺、桌面、厨房、卫生间等清洁情况...'},
+  {k:'amenity', ic:'🧴',lb:'日用品备置',     ph:'洗漱用品、卫生纸、垃圾袋、厨房用品等是否齐全...'},
+  {k:'smell',   ic:'🌸',lb:'气味 / 空气质量',ph:'有无异味、霉味、香烟味...'},
+  {k:'facility',ic:'🛋️',lb:'设施完好度',     ph:'家具、电器、卫浴设备是否正常运作...'},
+  {k:'wifi',    ic:'📶',lb:'WiFi 网络',      ph:'网络速度、稳定性...'},
+  {k:'other',   ic:'💬',lb:'其他建议',        ph:'任何其他值得记录的体验或改进建议...'},
 ];
 const LS_REC='iv5_records', LS_DR='iv5_drafts';
 
@@ -693,7 +701,7 @@ const LS_REC='iv5_records', LS_DR='iv5_drafts';
 //  STATE
 // ════════════════════════════════
 let records=[], drafts={}, curDraftId=null;
-let selProps=new Set(), propRooms={}, propPhotos={}, ynVal=null, autoTimer=null;
+let selProps=new Set(), propRooms={}, propPhotos={}, propRoomDims={}, ynVal=null, autoTimer=null;
 let dashTab='rec', recFilter='all', roomPropFilter='all';
 
 try{records=JSON.parse(localStorage.getItem(LS_REC)||'[]');}catch(e){records=[];}
@@ -772,7 +780,21 @@ function pad(n){return String(n).padStart(2,'0');}
 // ════════════════════════════════
 //  NAV
 // ════════════════════════════════
-function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(id);
+  target.classList.add('active');
+  // 手机端强制滚到顶部（多重保险）
+  document.body.scrollTop=0;
+  document.documentElement.scrollTop=0;
+  target.scrollTop=0;
+  window.scrollTo(0,0);
+  setTimeout(()=>{
+    window.scrollTo(0,0);
+    document.body.scrollTop=0;
+    document.documentElement.scrollTop=0;
+  },100);
+}
 function goBack(){saveDraft(false);goTo('home');renderHome();}
 
 function newDraft(){
@@ -811,7 +833,7 @@ function addPanel(p){
   // Room input
   body.innerHTML=`
     <div style="margin-bottom:4px">
-      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px;">🚪 体验房间号 <span style="font-weight:400;color:#bbb;font-size:11px;">（可多选，随时追加）</span></div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px;">🚪 体验房间号</div>
       <div class="room-row">
         <input type="text" id="${ppid(p)}-ri" placeholder="输入房间号，如 301" maxlength="10"
           onkeydown="if(event.key==='Enter'){event.preventDefault();addRoom('${p}');}">
@@ -833,7 +855,7 @@ function addPanel(p){
     if(i===2){
       const divider=document.createElement('div');
       divider.style='margin:6px 0 2px;padding:8px 0 4px;border-top:2px dashed var(--border);';
-      divider.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;">🚪 各房间情况 <span style="font-weight:400;color:#bbb;font-size:10px;">（复数房间需标明房间号）</span></div>';
+      divider.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;">🚪 各房间情况</div>';
       dl.appendChild(divider);
     }
     const item=document.createElement('div');item.className='dim-item';
@@ -851,12 +873,7 @@ function addPanel(p){
   photoSec.innerHTML=`
     <div class="photo-slabel">现场照片</div>
     <div class="photo-actions">
-      <div class="photo-drop" onclick="document.getElementById('${ppid(p)}-fi').click()">
-        <input type="file" id="${ppid(p)}-fi" accept="image/*" multiple onchange="handlePhotos(event,'${p}')">
-        <div style="font-size:20px;margin-bottom:2px">📷</div>
-        <div style="font-size:11px;color:var(--muted)">本地照片</div>
-      </div>
-      <div class="photo-drive-btn" onclick="document.getElementById('${ppid(p)}-dfi').click()">
+      <div class="photo-drive-btn" style="flex:1" onclick="document.getElementById('${ppid(p)}-dfi').click()">
         <input type="file" id="${ppid(p)}-dfi" accept="image/*" multiple onchange="handleDriveUpload(event,'${p}')">
         <div class="drive-icon">
           <svg width="20" height="20" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
@@ -868,13 +885,24 @@ function addPanel(p){
             <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
           </svg>
         </div>
-        <div class="drive-label">上传到 Drive</div>
+        <div class="drive-label">📷 上传现场照片</div>
       </div>
     </div>
     <div class="upload-progress" id="${ppid(p)}-uprog"><div class="upload-progress-bar" id="${ppid(p)}-uprogbar" style="width:0%"></div></div>
     <div class="photo-grid" id="${ppid(p)}-pg"></div>
   `;
   body.appendChild(photoSec);
+
+  // 追加房间按钮 & 容器
+  const roomBlocksWrap=document.createElement('div');
+  roomBlocksWrap.id=ppid(p)+'-rblocks';
+  body.appendChild(roomBlocksWrap);
+
+  const addRoomBlockBtn=document.createElement('button');
+  addRoomBlockBtn.className='add-room-block-btn';
+  addRoomBlockBtn.innerHTML='＋ 追加房间';
+  addRoomBlockBtn.onclick=()=>addRoomBlock(p);
+  body.appendChild(addRoomBlockBtn);
 
   card.appendChild(hdr);card.appendChild(body);
   document.getElementById('panels').appendChild(card);
@@ -913,8 +941,96 @@ function renderRoomTags(p){
 }
 
 // ════════════════════════════════
-//  PHOTOS
+//  ROOM BLOCKS (追加房间)
 // ════════════════════════════════
+const ROOM_DIMS=[ // 各房间独立填写的维度（去掉整体两项）
+  {k:'clean',   ic:'🧹',lb:'房间干净程度',   ph:'地面、床铺、桌面、厨房、卫生间等清洁情况...'},
+  {k:'amenity', ic:'🧴',lb:'日用品备置',     ph:'洗漱用品、卫生纸、垃圾袋、厨房用品等是否齐全...'},
+  {k:'smell',   ic:'🌸',lb:'气味 / 空气质量',ph:'有无异味、霉味、香烟味...'},
+  {k:'facility',ic:'🛋️',lb:'设施完好度',     ph:'家具、电器、卫浴设备是否正常运作...'},
+  {k:'wifi',    ic:'📶',lb:'WiFi 网络',      ph:'网络速度、稳定性...'},
+  {k:'other',   ic:'💬',lb:'其他建议',        ph:'任何其他值得记录的体验或改进建议...'},
+];
+
+function addRoomBlock(p, blockId, savedData){
+  if(!propRoomDims[p])propRoomDims[p]=[];
+  const bid=blockId||('rb-'+Date.now());
+  if(!blockId){
+    const entry={id:bid,roomNo:'',dims:{}};
+    propRoomDims[p].push(entry);
+  }
+  const wrap=document.getElementById(ppid(p)+'-rblocks');if(!wrap)return;
+
+  const block=document.createElement('div');
+  block.className='room-dim-block';block.id=ppid(p)+'-'+bid;
+
+  // Header with room number input
+  const hdr=document.createElement('div');hdr.className='room-dim-block-hdr';
+  const inp=document.createElement('input');
+  inp.type='text';inp.placeholder='输入房间号，如 302';inp.maxLength=10;
+  inp.value=savedData&&savedData.roomNo?savedData.roomNo:'';
+  inp.oninput=()=>{
+    const entry=propRoomDims[p]&&propRoomDims[p].find(x=>x.id===bid);
+    if(entry)entry.roomNo=inp.value;sched();
+  };
+  const delBtn=document.createElement('button');
+  delBtn.className='room-dim-block-del';delBtn.innerHTML='×';
+  delBtn.onclick=()=>removeRoomBlock(p,bid);
+  hdr.appendChild(inp);hdr.appendChild(delBtn);
+  block.appendChild(hdr);
+
+  // Dim fields
+  const bdy=document.createElement('div');bdy.className='room-dim-block-body';
+  ROOM_DIMS.forEach(d=>{
+    const item=document.createElement('div');item.className='dim-item';
+    const fieldId=ppid(p)+'-'+bid+'-'+d.k;
+    item.innerHTML=`
+      <div class="dim-head"><span class="dim-icon">${d.ic}</span>${d.lb}</div>
+      <textarea class="dim-ta" id="${fieldId}" placeholder="在此填写..." oninput="sched()">${savedData&&savedData.dims&&savedData.dims[d.k]?savedData.dims[d.k]:''}</textarea>
+    `;
+    bdy.appendChild(item);
+  });
+
+  // 现场照片
+  const photoDiv=document.createElement('div');
+  const rbPhotoKey=p+'__'+bid;
+  if(!propPhotos[rbPhotoKey])propPhotos[rbPhotoKey]=[];
+  photoDiv.innerHTML=`
+    <div class="photo-slabel">现场照片</div>
+    <div class="photo-actions">
+      <div class="photo-drive-btn" style="flex:1" onclick="document.getElementById('${ppid(p)}-${bid}-dfi').click()">
+        <input type="file" id="${ppid(p)}-${bid}-dfi" accept="image/*" multiple onchange="handleDriveUpload(event,'${rbPhotoKey}')">
+        <div class="drive-icon">
+          <svg width="20" height="20" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
+            <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+            <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/>
+            <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+            <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+            <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+            <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+          </svg>
+        </div>
+        <div class="drive-label">📷 上传现场照片</div>
+      </div>
+    </div>
+    <div class="upload-progress" id="${ppid(p)}-${bid}-uprog"><div class="upload-progress-bar" id="${ppid(p)}-${bid}-uprogbar" style="width:0%"></div></div>
+    <div class="photo-grid" id="${ppid(p)}-${bid}-pg"></div>
+  `;
+  bdy.appendChild(photoDiv);
+  if(savedData&&savedData.photos)propPhotos[rbPhotoKey]=[...savedData.photos];
+  setTimeout(()=>renderThumbs(rbPhotoKey),50);
+  block.appendChild(bdy);
+  wrap.appendChild(block);
+  // 滚动到新追加的房间
+  setTimeout(()=>block.scrollIntoView({behavior:'smooth',block:'start'}),100);
+  sched();
+}
+
+function removeRoomBlock(p,bid){
+  const el=document.getElementById(ppid(p)+'-'+bid);if(el)el.remove();
+  if(propRoomDims[p])propRoomDims[p]=propRoomDims[p].filter(x=>x.id!==bid);
+  sched();
+}
 function handlePhotos(evt,p){
   Array.from(evt.target.files).forEach(f=>{
     const r=new FileReader();r.onload=e=>{propPhotos[p].push({type:'local',src:e.target.result});renderThumbs(p);sched();};r.readAsDataURL(f);
@@ -952,29 +1068,38 @@ async function handleDriveUpload(evt,p){
 
 async function uploadToDrive(file,propName){
   return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=async e=>{
-      try{
-        const base64=e.target.result.split(',')[1];
-        const payload={
-          action:'uploadPhoto',
-          fileName:file.name,
-          mimeType:file.type||'image/jpeg',
-          base64Data:base64,
-          folderName:'现地体验报告_'+propName
-        };
-        const res=await fetch(GAS_URL,{
-          method:'POST',
-          headers:{'Content-Type':'text/plain'},
-          body:JSON.stringify(payload)
-        });
-        const data=await res.json();
-        if(data.url)resolve(data.url);
-        else reject(new Error(data.error||'上传失败'));
-      }catch(err){reject(err);}
+    // 先压缩图片再上传
+    const img=new Image();
+    const reader0=new FileReader();
+    reader0.onload=e0=>{
+      img.onload=async()=>{
+        try{
+          // 压缩：最大宽/高 1200px，质量 0.8
+          const MAX=1200,Q=0.8;
+          let w=img.width,h=img.height;
+          if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+          const canvas=document.createElement('canvas');
+          canvas.width=w;canvas.height=h;
+          canvas.getContext('2d').drawImage(img,0,0,w,h);
+          const base64=canvas.toDataURL('image/jpeg',Q).split(',')[1];
+          const payload={
+            action:'uploadPhoto',
+            fileName:file.name.replace(/\.[^.]+$/,'.jpg'),
+            mimeType:'image/jpeg',
+            base64Data:base64,
+            folderName:'现地体验报告_'+propName
+          };
+          const res=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+          const data=await res.json();
+          if(data.url)resolve(data.url);
+          else reject(new Error(data.error||'上传失败'));
+        }catch(err){reject(err);}
+      };
+      img.onerror=()=>reject(new Error('图片读取失败'));
+      img.src=e0.target.result;
     };
-    reader.onerror=()=>reject(new Error('文件读取失败'));
-    reader.readAsDataURL(file);
+    reader0.onerror=()=>reject(new Error('文件读取失败'));
+    reader0.readAsDataURL(file);
   });
 }
 
@@ -1014,16 +1139,25 @@ function setYN(v){
 function sched(){clearTimeout(autoTimer);autoTimer=setTimeout(()=>saveDraft(false),1400);}
 
 function collect(){
-  const pd={},pr={},pp={};
+  const pd={},pr={},pp={},prd={};
   selProps.forEach(p=>{
     pr[p]=[...(propRooms[p]||[])];
-    // Serialize photos: keep drive URLs, drop local base64 (too large for sheet)
     pp[p]=(propPhotos[p]||[]).filter(x=>x.type==='drive'||x.type==='local').map(x=>x.type==='drive'?{type:'drive',src:x.src,name:x.name||''}:{type:'local',src:x.src});
     pd[p]={};
     DIMS.forEach(d=>{const el=document.getElementById(ppid(p)+'-'+d.k);pd[p][d.k]=el?el.value.trim():'';});
+    // Collect room block dims
+    prd[p]=(propRoomDims[p]||[]).map(entry=>({
+      id:entry.id,
+      roomNo:entry.roomNo||'',
+      dims:Object.fromEntries(ROOM_DIMS.map(d=>{
+        const el=document.getElementById(ppid(p)+'-'+entry.id+'-'+d.k);
+        return[d.k,el?el.value.trim():''];
+      })),
+      photos:(propPhotos[p+'__'+entry.id]||[]).filter(x=>x.type==='drive'||x.type==='local').map(x=>x.type==='drive'?{type:'drive',src:x.src,name:x.name||''}:{type:'local',src:x.src})
+    }));
   });
   return{member:document.getElementById('f-member').value,week:document.getElementById('f-week').value,
-    date:document.getElementById('f-date').value,properties:[...selProps],propRooms:pr,propDims:pd,propPhotos:pp,
+    date:document.getElementById('f-date').value,properties:[...selProps],propRooms:pr,propDims:pd,propPhotos:pp,propRoomDims:prd,
     improved:ynVal,note:document.getElementById('f-note').value.trim()};
 }
 
@@ -1048,11 +1182,14 @@ function restoreDraft(d){
   // Restore rooms first
   if(d.propRooms)Object.entries(d.propRooms).forEach(([p,rs])=>propRooms[p]=[...rs]);
   if(d.propPhotos)Object.entries(d.propPhotos).forEach(([p,ph])=>propPhotos[p]=ph.map(x=>typeof x==='string'?{type:'local',src:x}:x));
+  if(d.propRoomDims)Object.entries(d.propRoomDims).forEach(([p,blocks])=>propRoomDims[p]=[...blocks]);
 
   (d.properties||[]).forEach(p=>{
     if(!selProps.has(p)){selProps.add(p);const b=document.getElementById('pc-'+sid(p));if(b)b.classList.add('on');}
     if(!document.getElementById(ppid(p)))addPanel(p);
     renderRoomTags(p);renderThumbs(p);
+    // Restore room blocks
+    (propRoomDims[p]||[]).forEach(entry=>addRoomBlock(p,entry.id,entry));
   });
 
   if(d.propDims)Object.entries(d.propDims).forEach(([p,dims])=>{
@@ -1089,7 +1226,7 @@ function submitForm(){
 function resetUI(){
   document.getElementById('f-member').value='';document.getElementById('f-note').value='';
   document.getElementById('save-time').textContent='—';
-  selProps.clear();propRooms={};propPhotos={};ynVal=null;
+  selProps.clear();propRooms={};propPhotos={};propRoomDims={};ynVal=null;
   document.querySelectorAll('.pchip').forEach(c=>c.classList.remove('on'));
   document.getElementById('panels').innerHTML='';
   document.getElementById('yn-yes').className='yn-btn';document.getElementById('yn-no').className='yn-btn';
@@ -1299,15 +1436,29 @@ function buildRoomIdx(propFilter){
   records.forEach(r=>{
     (r.properties||[]).forEach(p=>{
       if(propFilter&&propFilter!=='all'&&p!==propFilter)return;
-      const rooms=(r.propRooms&&r.propRooms[p])||[];
-      if(!rooms.length)return;
-      const pd=r.propDims&&r.propDims[p]||{};
       if(!idx[p])idx[p]={};
-      rooms.forEach(room=>{
-        if(!idx[p][room])idx[p][room]=[];
+
+      // ① 顶部房间号 + 整体维度
+      const rooms=(r.propRooms&&r.propRooms[p])||[];
+      if(rooms.length){
+        const pd=r.propDims&&r.propDims[p]||{};
         const dimEntries={};
         DIMS.forEach(d=>{const v=pd[d.k]||'';if(v)dimEntries[d.k]=v;});
-        idx[p][room].push({member:r.member,date:r.date,week:r.week,dims:dimEntries});
+        rooms.forEach(room=>{
+          if(!idx[p][room])idx[p][room]=[];
+          idx[p][room].push({member:r.member,date:r.date,week:r.week,dims:dimEntries,source:'overall'});
+        });
+      }
+
+      // ② 追加房间块（每个房间独立数据）
+      const roomBlocks=(r.propRoomDims&&r.propRoomDims[p])||[];
+      roomBlocks.forEach(block=>{
+        const roomNo=block.roomNo||'';
+        if(!roomNo)return;
+        if(!idx[p][roomNo])idx[p][roomNo]=[];
+        const dimEntries={};
+        ROOM_DIMS.forEach(d=>{const v=block.dims&&block.dims[d.k]||'';if(v)dimEntries[d.k]=v;});
+        idx[p][roomNo].push({member:r.member,date:r.date,week:r.week,dims:dimEntries,source:'room'});
       });
     });
   });
@@ -1346,7 +1497,8 @@ function renderRoomView(){
       const entries=idx[p][room];
       const dimAgg={};
       entries.forEach(e=>Object.entries(e.dims).forEach(([k,v])=>{if(!dimAgg[k])dimAgg[k]=[];dimAgg[k].push({text:v,member:e.member,date:e.date});}));
-      const dimsWithData=DIMS.filter(d=>dimAgg[d.k]);
+      const allDims=[...DIMS,...ROOM_DIMS.filter(d=>!DIMS.find(x=>x.k===d.k))];
+      const dimsWithData=allDims.filter(d=>dimAgg[d.k]);
       const members=[...new Set(entries.map(e=>e.member))].join('、');
       const latestDate=entries.map(e=>e.date).sort().reverse()[0];
       const dimHTML=dimsWithData.map(d=>{
